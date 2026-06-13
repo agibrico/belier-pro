@@ -2,6 +2,9 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <!-- LE CAPTEUR MAGIQUE : Dit à Android d'adapter l'affichage à la largeur réelle du téléphone -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  
   <title>Les Fermes du Bélier Pro</title>
   <style>
     :root {
@@ -13,16 +16,30 @@
       --text: #37474f;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background-color: var(--bg); color: var(--text); padding: 10px; }
-    .container { max-width: 500px; margin: 0 auto; background: var(--card-bg); border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 20px; min-height: 90vh; }
+    
+    /* Optimisé pour mobile : pas de marges extérieures perdues */
+    body { background-color: var(--bg); color: var(--text); padding: 0; }
+    
+    /* Le conteneur prend tout l'écran sur mobile */
+    .container { 
+      width: 100%; 
+      max-width: 500px; 
+      margin: 0 auto; 
+      background: var(--card-bg); 
+      padding: 20px; 
+      min-height: 100vh; 
+      display: flex;
+      flex-direction: column;
+    }
+    
     header { text-align: center; margin-bottom: 25px; border-bottom: 3px solid var(--primary); padding-bottom: 10px; }
     header h1 { color: var(--primary); font-size: 22px; text-transform: uppercase; letter-spacing: 1px; }
     .status-bar { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 15px; background: #e8f5e9; padding: 6px 12px; border-radius: 6px; color: var(--primary-dark); font-weight: bold; }
-    .page { display: none; }
+    .page { display: none; flex: 1; }
     .page.active { display: block; }
     .form-group { margin-bottom: 15px; }
     label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
-    input, select, textarea { width: 100%; padding: 12px; border: 1px solid #cfd8dc; border-radius: 8px; font-size: 15px; background: #fafafa; transition: 0.3s; }
+    input, select, textarea { width: 100%; padding: 12px; border: 1px solid #cfd8dc; border-radius: 8px; font-size: 16px; background: #fafafa; transition: 0.3s; }
     input:focus, select:focus { border-color: var(--primary); background: #fff; outline: none; }
     input[readonly] { background-color: #eceff1; color: #37474f; cursor: not-allowed; font-weight: bold; }
     .checkbox-container { display: flex; align-items: center; gap: 8px; margin-top: 5px; font-size: 13px; }
@@ -47,13 +64,18 @@
     .comment-box { background: #fcfcfc; border-left: 4px solid var(--primary); padding: 10px; margin-top: 10px; font-style: italic; font-size: 13px; }
     @keyframes alerteBlink { from { box-shadow: 0 0 4px #f44336; } to { box-shadow: 0 0 15px #f44336; background: #ffc107; } }
 
-    /* Styles exclusifs du Tableau de Bord Sanitaire & Alimentaire */
     .vax-dashboard { background: #ffffff; border: 2px solid #b0bec5; border-radius: 8px; padding: 12px; margin-bottom: 15px; font-size: 12px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); }
     .vax-dashboard h4 { color: var(--primary-dark); font-size: 13px; margin-bottom: 8px; border-bottom: 2px solid var(--primary); padding-bottom: 3px; display: flex; align-items: center; gap: 5px; }
     .vax-table { width: 100%; border-collapse: collapse; margin-top: 5px; }
     .vax-table th, .vax-table td { padding: 6px 4px; text-align: left; border-bottom: 1px solid #e0e0e0; }
     .vax-table th { background: #f5f5f5; font-weight: bold; color: #555; font-size: 11px; }
     .vax-badge { background: #ffe082; color: #5d4037; padding: 2px 4px; border-radius: 4px; font-weight: bold; font-size: 10px; }
+
+    /* ADAPTATION ORDINATEUR : Si on ouvre le code sur PC, il redevient une jolie carte centrée */
+    @media (min-width: 501px) {
+      body { padding: 20px; }
+      .container { border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); min-height: 90vh; }
+    }
   </style>
 </head>
 <body>
@@ -268,7 +290,7 @@
     <div class="kpi-container" style="background:#ffffff; border:1px solid #cfd8dc;">
       <strong style="color:var(--primary-dark); display:block; margin-bottom:10px; border-bottom:2px solid #eee; padding-bottom:5px;">Chiffres d'Affaires (Ventes)</strong>
       <div class="kpi-row"><span>Chiffre d'affaires Hebdomadaire :</span> <span id="cf-ca-hebdo" style="font-weight:bold; color:var(--primary-dark);">0 FCFA</span></div>
-      <div class="kpi-row"><span>Chiffre d'affaires Gensuel :</span> <span id="cf-ca-mensuel" style="font-weight:bold; color:var(--primary-dark);">0 FCFA</span></div>
+      <div class="kpi-row"><span>Chiffre d'affaires Mensuel :</span> <span id="cf-ca-mensuel" style="font-weight:bold; color:var(--primary-dark);">0 FCFA</span></div>
     </div>
 
     <div class="kpi-container" style="background:#ffffff; border:1px solid #cfd8dc;">
@@ -294,15 +316,11 @@
   let SOUS_MODE_ALIMENT = "INTRANT";
   let ALARME_SANITAIRE_ACTIVE = true;
 
-  // Variables de sessions spécifiques pour le module Formules_Aliment
-  let SELECTION_SESSION_ALIMENT = "GESTION"; // GESTION, TYPES, LISTE
-  let SOUS_CHOIX_GESTION_INTRANT = "AJOUTER"; // AJOUTER, CHANGER
+  let SELECTION_SESSION_ALIMENT = "GESTION"; 
+  let SOUS_CHOIX_GESTION_INTRANT = "AJOUTER"; 
   let SELECTION_ALIMENT_DASHBOARD = "Démarrage";
-
-  // Variables pour la simulation de contrôle de pesée (clignotement tous les 30 jours à partir du bilan sevrage)
   let COMPTEUR_JOURS_SIMULE = 29; 
 
-  // Variable de simulation de saillie pour déclencher le clignotement Mises-bas (Simulé à 113 jours pour démo active)
   let DATE_SAILLIE_SIMULEE_POUR_ALERTE = new Date();
   DATE_SAILLIE_SIMULEE_POUR_ALERTE.setDate(DATE_SAILLIE_SIMULEE_POUR_ALERTE.getDate() - 113);
 
@@ -429,7 +447,6 @@
     const btnMisesBas = document.getElementById("btn-suivi-mises-bas");
     
     setInterval(() => { 
-      // Gestion Alerte Sanitaire
       if(btnVax) {
         if (ALARME_SANITAIRE_ACTIVE) {
           btnVax.classList.add("clignotant");
@@ -441,12 +458,10 @@
         }
       }
       
-      // Gestion Fiche Alimentaire (Clignote en continu - Priorité Critique)
       if(btnAlim) {
         btnAlim.classList.toggle("clignotant");
       }
 
-      // ALERTE DES 30 JOURS POUR LA PESÉE
       if(btnPesee) {
         if(COMPTEUR_JOURS_SIMULE >= 30) {
           btnPesee.classList.add("clignotant");
@@ -458,13 +473,11 @@
         }
       }
 
-      // ALERTE TECHNIQUE : INTERVALLE DE 10 JOURS POUR LA MISE-BAS (GESTATION PORCINE)
       if(btnMisesBas) {
         const maintenant = new Date();
         const diffTemps = maintenant - DATE_SAILLIE_SIMULEE_POUR_ALERTE;
         const diffJours = Math.floor(diffTemps / (1000 * 60 * 60 * 24));
         
-        // La gestation dure ~114 jours. Fenêtre d'alerte critique entre le jour 110 et le jour 120 (10 jours d'intervalle)
         if (diffJours >= 110 && diffJours <= 120) {
           btnMisesBas.classList.add("clignotant");
           btnMisesBas.textContent = `⚠️ VIGILANCE MISE-BAS (JOUR ${diffJours})`;
@@ -555,7 +568,6 @@
     fieldPrevision.value = `Du ${dMin.toLocaleDateString('fr-FR', options)} au ${dMax.toLocaleDateString('fr-FR', options)}`;
   }
 
-  /* FONCTIONS ASSOCIEES EXCLUSIVEMENT AU BILAN SEVRAGE */
   function calculerDateEntreeEngraissement(dateSevrageVal) {
     const fieldEngr = document.getElementById("sev_date_engraissement");
     if(!fieldEngr) return;
@@ -671,7 +683,6 @@
     boxLive.style.borderLeft = `4px solid ${couleurFonds}`;
   }
 
-  /* GESTION DYNAMIQUE DE LA PROVENANCE DANS L'ENTREE DES PORCELETS */
   function gererProvenancePorcelets(provenance) {
     const type = document.getElementById("e_type").value;
     if (type !== "Lots de porcelets") return;
@@ -679,20 +690,14 @@
     const conteneur = document.getElementById("conteneur-e-id");
     if (!conteneur) return;
 
-    // Récupération des identifiants déjà présents dans le système pour assurer l'unicité
     let existingIds = ["LOT-P1", "LOT-P2"];
     let localQueue = JSON.parse(localStorage.getItem("belier_offline_queue") || "[]");
     localQueue.forEach(item => {
-      if (item.table === "Entree_Porc" && item.data && item.data[2]) {
-        existingIds.push(item.data[2]);
-      }
-      if (item.table === "Sevrage" && item.data && item.data[5]) {
-        existingIds.push(item.data[5]);
-      }
+      if (item.table === "Entree_Porc" && item.data && item.data[2]) existingIds.push(item.data[2]);
+      if (item.table === "Sevrage" && item.data && item.data[5]) existingIds.push(item.data[5]);
     });
 
     if (provenance === "Acheté") {
-      // Génération automatique d'un ID Unique incrémenté (LOT-P3, LOT-P4...)
       let counter = 1;
       let candidateId = `LOT-P${counter}`;
       while (existingIds.includes(candidateId)) {
@@ -702,13 +707,10 @@
       conteneur.innerHTML = `<input type="text" id="e_id" value="${candidateId}" readonly required style="background-color: #eceff1; font-weight: bold;">`;
     } 
     else if (provenance === "Issu des truies du cheptel") {
-      // Chargement des ID de lots définis dans le volet Sevrage / Suivi Allaitement
       let internalLots = ["LOT-P1", "LOT-P2"];
       localQueue.forEach(item => {
         if (item.table === "Sevrage" && item.data && item.data[5]) {
-          if (!internalLots.includes(item.data[5])) {
-            internalLots.push(item.data[5]);
-          }
+          if (!internalLots.includes(item.data[5])) internalLots.push(item.data[5]);
         }
       });
 
@@ -1044,7 +1046,6 @@
       }, 50);
     }
     else if (TABLE_ACTIVE === "Formules_Aliment") {
-      // Zone de navigation interne exclusive entre les 3 nouvelles sessions
       html += `<div class="toggle-zone" style="margin-bottom: 20px;">
                 <button type="button" class="toggle-btn ${SELECTION_SESSION_ALIMENT === 'GESTION' ? 'active' : ''}" onclick="SELECTION_SESSION_ALIMENT='GESTION'; construireChampsFormulaire();">➕/🔄 Intrants</button>
                 <button type="button" class="toggle-btn ${SELECTION_SESSION_ALIMENT === 'TYPES' ? 'active' : ''}" onclick="SELECTION_SESSION_ALIMENT='TYPES'; construireChampsFormulaire();">📊 Types d'Aliments</button>
@@ -1127,7 +1128,6 @@
         });
         html += `</div>`;
 
-        // Récupération dynamique des données de la formule sélectionnée
         let donneesFormule = FORMULES_PAR_DEFAUT[SELECTION_ALIMENT_DASHBOARD];
         html += `<div class="vax-dashboard" style="border:2px solid var(--primary);">
                    <h4>📊 Composition de l'Aliment : ${SELECTION_ALIMENT_DASHBOARD}</h4>
@@ -1252,10 +1252,6 @@
     if(fieldSomme) fieldSomme.value = pTotal * pKg;
   }
 
-  function chargerValeursDefautIntrant() {
-    // Cette fonction native est maintenue pour assurer la compatibilité structurelle globale
-  }
-
   function declencherCalculAutomatiqueCout(typeAliment) {
     const fieldKg = document.getElementById("c_prix_kg");
     const fieldSac = document.getElementById("c_prix_sac");
@@ -1269,10 +1265,6 @@
         if(prixKg > 0) { fieldKg.value = prixKg; fieldSac.value = prixKg * 50; }
       }).recupererPrixAliment(typeAliment);
     }
-  }
-
-  function permuterArchitectureSujetPorc(valeur) {
-    // Maintenu pour la cohérence de l'arbre global des fonctions de scripts
   }
 
   function verifierNouveauChoixIntrant(valeur, idConteneur) {
