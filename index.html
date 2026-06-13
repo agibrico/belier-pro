@@ -2,7 +2,6 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <!-- LE CAPTEUR MAGIQUE : Dit à Android d'adapter l'affichage à la largeur réelle du téléphone -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   
   <title>Les Fermes du Bélier Pro</title>
@@ -49,6 +48,7 @@
     .btn-primary:hover { background: var(--primary-dark); }
     .btn-accent { background: var(--accent); color: #fff; }
     .btn-nav { background: #cfd8dc; color: #37474f; }
+    .btn-email { background: #0288d1; color: #fff; }
     .btn-danger { background: #d32f2f; color: #fff; }
     .alert-box { padding: 12px; border-radius: 6px; margin-bottom: 15px; font-size: 13px; font-weight: bold; text-align: center; display: none; }
     .alert-error { background: #ffebee; color: #c62828; border: 1px solid #ef9a9a; }
@@ -294,9 +294,13 @@
     </div>
 
     <div class="kpi-container" style="background:#ffffff; border:1px solid #cfd8dc;">
-      <strong style="color:var(--accent); display:block; margin-bottom:10px; border-bottom:2px solid #eee; padding-bottom:5px;">Bénéfices Nets (Ventes - Aliments - Dépenses)</strong>
+      <strong style="color:var(--accent); display:block; margin-bottom:10px; border-bottom:2px solid #eee; padding-bottom:5px;">Bénéfices Nets &amp; Répartition</strong>
       <div class="kpi-row"><span>Bénéfice Hebdomadaire :</span> <span id="cf-ben-hebdo" style="font-weight:bold;">0 FCFA</span></div>
-      <div class="kpi-row"><span>Bénéfice integration Mensuel :</span> <span id="cf-ben-mensuel" style="font-weight:bold;">0 FCFA</span></div>
+      <div class="kpi-row"><span>Bénéfice Intégration Mensuel :</span> <span id="cf-ben-mensuel" style="font-weight:bold;">0 FCFA</span></div>
+      <div class="kpi-row" style="border-top: 1px solid var(--accent); padding-top: 6px; margin-top: 4px;">
+        <span style="color:var(--primary-dark); font-weight:bold;">Part par Associé (50%) :</span> 
+        <span id="cf-part-associerepartition" style="font-weight:bold; color:var(--primary-dark);">0 FCFA</span>
+      </div>
     </div>
 
     <div class="kpi-container" style="background:#fafafa;">
@@ -304,7 +308,8 @@
       <div id="cf-commentaire" class="comment-box">Analyse des flux en cours...</div>
     </div>
 
-    <button class="btn-nav" style="margin-top:15px;" onclick="revenirDepuisCashFlow()">Retour au Menu</button>
+    <button class="btn-email" onclick="declarerEnvoiRapportMail()">📧 Envoyer Rapport à atsegillesbrice@gmail.com</button>
+    <button class="btn-nav" style="margin-top:5px;" onclick="revenirDepuisCashFlow()">Retour au Menu</button>
   </div>
 
 </div>
@@ -327,6 +332,18 @@
   const LISTE_INTRANTS_REFERENCE = [
     "Maïs", "Soja", "Son de blé", "Palmiste", "Huile", "Pré-mix 1 %", "Coquillage", "Sel", "Autre Intrant / Nouveau"
   ];
+
+  // Base tarifaire ajustée à 160 FCFA pour le Maïs
+  const PRIX_KILO_INTRANTS_BASE = {
+    "Maïs": 160, 
+    "Soja": 450,
+    "Son de blé": 110,
+    "Palmiste": 90,
+    "Huile": 900,
+    "Pré-mix 1 %": 2200,
+    "Coquillage": 120,
+    "Sel": 200
+  };
 
   const FORMULES_PAR_DEFAUT = {
     "Démarrage": { cost_kg: 227, composition: { "Maïs": 48, "Soja": 24, "Son de blé": 18, "Palmiste": 7, "Pré-mix 1 %": 1, "Coquillage": 1.5, "Sel": 0.5 } },
@@ -963,7 +980,7 @@
                  <label>Case ID / Lot de la Truie Gestante</label>
                  <input type="text" id="mb_id_lot" placeholder="Ex: LOT-GEST-01" required>
                </div>
-               <div class="form-group">
+                 <div class="form-group">
                  <label>Identifiant Unique de la Truie (ID Truie)</label>
                  <input type="text" id="mb_id_truie" placeholder="Ex: T-GEST-04" required>
                </div>
@@ -1167,7 +1184,7 @@
                    </div>
                    <div class="form-group">
                      <label>Changer le prix du kg d'un intrant (FCFA)</label>
-                     <input type="number" id="f_cout_intrant_prix_kg" placeholder="Ex: 160">
+                     <input type="number" id="f_cout_intrant_prix_kg" value="160" placeholder="Ex: 160">
                    </div>
                  </div>`;
       }
@@ -1256,10 +1273,21 @@
     const fieldKg = document.getElementById("c_prix_kg");
     const fieldSac = document.getElementById("c_prix_sac");
     if(!fieldKg || !fieldSac) return;
+    
+    // Dynamisation du coût incluant le Maïs à 160 FCFA
     if (FORMULES_PAR_DEFAUT[typeAliment]) {
-      let pKg = FORMULES_PAR_DEFAUT[typeAliment].cost_kg; fieldKg.value = pKg; fieldSac.value = pKg * 50;
+      let composition = FORMULES_PAR_DEFAUT[typeAliment].composition;
+      let coutCalcule = 0;
+      for(let [intrant, pct] of Object.entries(composition)) {
+        let prixBase = PRIX_KILO_INTRANTS_BASE[intrant] || 200;
+        coutCalcule += (prixBase * (pct / 100));
+      }
+      let finalKg = Math.round(coutCalcule);
+      fieldKg.value = finalKg; 
+      fieldSac.value = finalKg * 50;
     }
-    if (typeof google === "undefined" && google.script && google.script.run) {
+
+    if (typeof google !== "undefined" && google.script && google.script.run) {
       google.script.run.withSuccessHandler(prixKgExtrait => {
         let prixKg = parseFloat(prixKgExtrait || 0);
         if(prixKg > 0) { fieldKg.value = prixKg; fieldSac.value = prixKg * 50; }
@@ -1280,258 +1308,4 @@
 
     if (TABLE_ACTIVE === "Entree_Porc") {
       let typeSelectionne = document.getElementById("e_type").value;
-      let idLotSujet = document.getElementById("e_id").value;
-      let nbrPorcelets = typeSelectionne === "Lots de porcelets" ? parseFloat(document.getElementById("e_nbr_porcelets").value || 0) : 1;
-      let poidsSujet = typeSelectionne !== "Lots de porcelets" ? parseFloat(document.getElementById("e_poids").value || 0) : 0;
-      let provenance = typeSelectionne === "Lots de porcelets" ? document.getElementById("e_provenance").value : "N/A";
-      rowData.push(typeSelectionne, idLotSujet, nbrPorcelets, poidsSujet, provenance);
-      alert(`Entrée porc enregistrée avec succès. ID Lot: ${idLotSujet}`);
-    }
-    else if (TABLE_ACTIVE === "Saillies") {
-      let idTruie = document.getElementById("s_id_truie").value;
-      let idLot = document.getElementById("s_id_lot").value;
-      let nbrDejaSaillie = parseFloat(document.getElementById("s_nbr_deja_saillie").value || 0);
-      let nbrRestant = parseFloat(document.getElementById("s_nbr_restant").value || 0);
-      rowData.push(idTruie, idLot, nbrDejaSaillie, nbrRestant);
-    }
-    else if (TABLE_ACTIVE === "Gestation") {
-      let idTruie = document.getElementById("g_id_truie").value;
-      let idLot = document.getElementById("g_id_lot").value;
-      let dateSaillie = document.getElementById("g_date_saillie").value;
-      let intervalleMiseBas = document.getElementById("g_intervalle_mise_bas").value;
-      let observations = document.getElementById("g_obs").value;
-      rowData.push(idTruie, idLot, dateSaillie, intervalleMiseBas, observations);
-    }
-    else if (TABLE_ACTIVE === "Vaccins") {
-      let sujet = document.getElementById("vac_type_sujet").value;
-      let caseId = document.getElementById("vac_case_id").value;
-      let modeInterv = document.getElementById("vac_mode_intervention").value;
-      
-      if (modeInterv === "vaccin") {
-        let vaxNom = document.getElementById("vac_nom_liste").value;
-        let vaxPeriode = document.getElementById("vac_periode_injection").value;
-        rowData.push(sujet, caseId, modeInterv, vaxNom, vaxPeriode);
-        alert("Planification du vaccin enregistrée avec succès.");
-      } else {
-        let medType = document.getElementById("med_type_medicament").value;
-        rowData.push(sujet, caseId, modeInterv, medType, "Immédiat (Soin)");
-        ALARME_SANITAIRE_ACTIVE = false; 
-        alert("Médicament administré ! L'alarme a été désactivée avec succès.");
-      }
-    }
-    else if (TABLE_ACTIVE === "Quarantaine") {
-      let typeQ = document.getElementById("q_type").value;
-      let idQ = document.getElementById("q_id").value;
-      let qteQ = typeQ === "lot porcelets" ? parseFloat(document.getElementById("q_quantite").value || 0) : 1;
-      let motifQ = document.getElementById("q_motif").value;
-      rowData.push(typeQ, idQ, qteQ, motifQ);
-      alert("Mise en quarantaine enregistrée avec succès.");
-    }
-    else if (TABLE_ACTIVE === "Mortalite") {
-      let idSujet = document.getElementById("m_id_sujet").value;
-      let codeTag = document.getElementById("m_code_tag").value;
-      let qteMorts = parseFloat(document.getElementById("m_quantite").value || 0);
-      let causeMort = document.getElementById("m_cause").value;
-      rowData.push(idSujet, codeTag, qteMorts, causeMort);
-      alert("Déclaration de mortalité enregistrée avec succès.");
-    }
-    else if (TABLE_ACTIVE === "Alimentation") {
-      let idSujet = document.getElementById("a_id_sujet").value;
-      let typeAlim = document.getElementById("a_type_aliment").value;
-      let qteKg = parseFloat(document.getElementById("a_quantite_kg").value || 0);
-      let obs = document.getElementById("a_obs").value;
-      rowData.push(idSujet, typeAlim, qteKg, obs);
-      alert("Ration journalière sauvegardée avec succès.");
-    }
-    else if (TABLE_ACTIVE === "Poids") {
-      let idLot = document.getElementById("p_id_lot").value;
-      let poidsMoyen = parseFloat(document.getElementById("p_poids_moyen").value || 0);
-      let obs = document.getElementById("p_obs").value;
-      rowData.push(idLot, poidsMoyen, obs);
-      COMPTEUR_JOURS_SIMULE = 0; 
-      alert(`Contrôle de croissance du lot ${idLot} validé (${poidsMoyen} kg). Alarme désactivée pour les 30 prochains jours.`);
-    }
-    else if (TABLE_ACTIVE === "Mises_Bas") {
-      let idLot = document.getElementById("mb_id_lot").value;
-      let idTruie = document.getElementById("mb_id_truie").value;
-      let porceletsVivants = parseFloat(document.getElementById("mb_porcelets_vivants").value || 0);
-      let porceletsMorts = parseFloat(document.getElementById("mb_porcelets_morts").value || 0);
-      let commentaire = document.getElementById("mb_commentaire").value;
-      rowData.push(idLot, idTruie, porceletsVivants, porceletsMorts, commentaire);
-      alert(`Bilan de mise-bas pour la truie ${idTruie} sauvegardé (${porceletsVivants} porcelets vifs obtenus).`);
-    }
-    else if (TABLE_ACTIVE === "Allaitement") {
-      let idLot = document.getElementById("al_id_lot").value;
-      let idTruie = document.getElementById("al_id_truie").value;
-      let comportement = document.getElementById("al_comportement").value;
-      let commentaire = document.getElementById("al_commentaire").value;
-      rowData.push(idLot, idTruie, comportement, commentaire);
-      alert(`Bilan de suivi d'allaitement pour la truie ${idTruie} sauvegardé (${comportement}).`);
-    }
-    else if (TABLE_ACTIVE === "Sevrage") {
-      let idLotTruies = document.getElementById("sev_id_lot_truies").value;
-      let idTruie = document.getElementById("sev_id_truie").value;
-      let nbrSevres = parseFloat(document.getElementById("sev_nbr_sevres").value || 0);
-      let idLotPorcelets = document.getElementById("sev_id_lot_porcelets").value;
-      let dateSevrage = document.getElementById("sev_date_sevrage").value;
-      let dateEngraissement = document.getElementById("sev_date_engraissement").value;
-      
-      rowData.push(idLotTruies, idTruie, dateSevrage, nbrSevres, idLotPorcelets, dateEngraissement);
-      alert(`Bilan Sevrage validé ! La truie ${idTruie} réintègre le lot en tant que 'Truie Vide' (Repos de 30 jours avant saillie). Le lot porcelets ${idLotPorcelets} est synchronisé pour l'entrée en engraissement le ${dateEngraissement}.`);
-    }
-    else if (TABLE_ACTIVE === "Ventes") {
-      let qteTetes = parseFloat(document.getElementById("v_qte").value || 0);
-      let poidsTotal = parseFloat(document.getElementById("v_poids_total").value || 0);
-      let p_kg = parseFloat(document.getElementById("v_pkg").value || 0);
-      let sommeTotale = poidsTotal * p_kg;
-      rowData.push(document.getElementById("v_type").value, document.getElementById("v_id").value, qteTetes, poidsTotal, p_kg, sommeTotale);
-      memoriserElementPourCalculLocal("ventes", sommeTotale);
-    } 
-    else if (TABLE_ACTIVE === "Cout_Aliment") {
-      let pSac = parseFloat(document.getElementById("c_prix_sac").value || 0);
-      rowData.push(document.getElementById("c_type_aliment").value, parseFloat(document.getElementById("c_prix_kg").value || 0), pSac);
-      memoriserElementPourCalculLocal("cout_intrants", pSac);
-    }
-    else if (TABLE_ACTIVE === "Formules_Aliment") {
-      rowData.push("SESSION_COMPLEXE_FORMULES", SELECTION_SESSION_ALIMENT);
-      if (SELECTION_SESSION_ALIMENT === "GESTION") {
-        rowData.push(SOUS_CHOIX_GESTION_INTRANT);
-        if (SOUS_CHOIX_GESTION_INTRANT === "AJOUTER") {
-          rowData.push(document.getElementById("f_nom_intrant_ajout").value, parseFloat(document.getElementById("f_pct_intrant_ajout").value || 0), document.getElementById("f_type_aliment_ajout").value);
-        } else {
-          rowData.push(document.getElementById("f_type_aliment_change").value, document.getElementById("f_intrant_a_retirer").value, document.getElementById("f_nouveau_nom_change").value, parseFloat(document.getElementById("f_nouveau_pct_change").value || 0));
-        }
-      } else if (SELECTION_SESSION_ALIMENT === "LISTE") {
-        let pKgIntrant = parseFloat(document.getElementById("f_cout_intrant_prix_kg").value || 0);
-        rowData.push("CHANGER_PRIX_INTRANT", document.getElementById("f_cout_intrant_nom").value, pKgIntrant);
-        alert(`Le coût de l'intrant ${document.getElementById("f_cout_intrant_nom").value} a été ajusté localement à ${pKgIntrant} FCFA/Kg.`);
-      }
-      alert("Configuration de la formule enregistrée avec succès.");
-    } 
-    else if (TABLE_ACTIVE === "Depenses") {
-      let typeDep = document.getElementById("d_type").value; let motifFinal = document.getElementById("d_motif").value;
-      let mt = parseFloat(document.getElementById("d_mt").value || 0); let trans = parseFloat(document.getElementById("d_trans").value || 0); let prod = parseFloat(document.getElementById("d_prod").value || 0);
-      let chargeTotale = mt + trans + prod;
-      if(typeDep === "Aliment") {
-        let intrantAchat = document.getElementById("d_intrant_select").value;
-        if(intrantAchat === "Autre Intrant / Nouveau") intrantAchat = document.getElementById("d_intrant_custom").value;
-        motifFinal = `[Intrant: ${intrantAchat} | Sacs: ${document.getElementById("d_sacs").value || 0}] ` + motifFinal;
-      }
-      rowData.push(typeDep, motifFinal, mt, trans, prod);
-      memoriserElementPourCalculLocal("depenses", chargeTotale);
-    } 
-    else {
-      rowData.push(document.getElementById("g_generic_id").value, document.getElementById("g_generic_poids").value, document.getElementById("g_generic_obs").value);
-    }
-
-    if (!navigator.onLine || typeof google === "undefined" || !google.script || !google.script.run) {
-      enregistrerDonneesEnLocal(rowData);
-    } else {
-      document.getElementById("sync-status").textContent = "Cloud...";
-      google.script.run.withSuccessHandler(res => {
-        if(res && res.statut === "OK") {
-          document.getElementById("sync-status").textContent = "Données Prêtes";
-          alert("Données enregistrées dans le Cloud."); revenirDepuisFormulaire();
-        } else { enregistrerDonneesEnLocal(rowData); }
-      }).withFailureHandler(() => { enregistrerDonneesEnLocal(rowData); }).soumettreFormulaireDonnees(TABLE_ACTIVE, rowData);
-    }
-  }
-
-  function enregistrerDonneesEnLocal(rowData) {
-    let localQueue = JSON.parse(localStorage.getItem("belier_offline_queue") || "[]");
-    localQueue.push({ table: TABLE_ACTIVE, data: rowData });
-    localStorage.setItem("belier_offline_queue", JSON.stringify(localQueue));
-    document.getElementById("sync-status").textContent = "Stocké en local (Hors-ligne)";
-    document.getElementById("sync-status").style.color = "#f57c00";
-    alert("Sauvegarde effectuée dans la mémoire locale.");
-    revenirDepuisFormulaire();
-  }
-
-  function traiterSynchronisationDonneesAmorcees() {
-    let localQueue = JSON.parse(localStorage.getItem("belier_offline_queue") || "[]");
-    if(localQueue.length === 0 || typeof google === "undefined" || !google.script || !google.script.run) return;
-    let item = localQueue.shift();
-    google.script.run.withSuccessHandler(() => {
-      localStorage.setItem("belier_offline_queue", JSON.stringify(localQueue)); traiterSynchronisationDonneesAmorcees();
-    }).soumettreFormulaireDonnees(item.table, item.data);
-  }
-
-  function executerSauvegardeOuvertureFermeture() {
-    if(navigator.onLine && typeof google !== "undefined" && google.script && google.script.run) { 
-      try { google.script.run.executerSauvegardeAutomatique(); } catch(e) { console.log("Sauvegarde planifiée reportée."); }
-    }
-  }
-
-  function memoriserElementPourCalculLocal(cle, valeur) {
-    let historique = JSON.parse(localStorage.getItem("historique_finance_" + cle) || "[]");
-    historique.push({ date: new Date().getTime(), montant: valeur });
-    localStorage.setItem("historique_finance_" + cle, JSON.stringify(historique));
-  }
-
-  function ouvrirFenetreCashFlow() {
-    basculerPage('page-cashflow-details');
-    if (typeof google !== "undefined" && google.script && google.script.run) {
-      document.getElementById("cf-commentaire").textContent = "Récupération cloud...";
-      google.script.run.withSuccessHandler(res => {
-        if(res && res.statut === "OK") {
-          mettreAJourUIChiffres(res.ca_hebdo, res.ca_mensuel, res.ben_hebdo, res.ben_mensuel, res.commentaire);
-        } else { genererAnalyseFinanciereDepuisLocal(); }
-      }).withFailureHandler(() => { genererAnalyseFinanciereDepuisLocal(); }).extraireDonneesTrésorerieGlobale();
-    } else { genererAnalyseFinanciereDepuisLocal(); }
-  }
-
-  function revenirDepuisCashFlow() { ouvrirEspaceRole(); }
-
-  function genererAnalyseFinanciereDepuisLocal() {
-    const maintenant = new Date().getTime(); const uneSemaine = 7 * 24 * 60 * 60 * 1000; const unMois = 30 * 24 * 60 * 60 * 1000;
-    let totalVentesHebdo = extraireSommePeriodeLocal("ventes", maintenant, uneSemaine);
-    let totalVentesMensuel = extraireSommePeriodeLocal("ventes", maintenant, unMois);
-    let totalIntrantsHebdo = extraireSommePeriodeLocal("cout_intrants", maintenant, uneSemaine);
-    let totalIntrantsMensuel = extraireSommePeriodeLocal("cout_intrants", maintenant, unMois);
-    let totalDepensesHebdo = extraireSommePeriodeLocal("depenses", maintenant, uneSemaine);
-    let totalDepensesMensuel = extraireSommePeriodeLocal("depenses", maintenant, unMois);
-
-    if(totalVentesMensuel === 0) {
-      totalVentesHebdo = 850000; totalVentesMensuel = 3400000;
-      totalIntrantsHebdo = 410000; totalIntrantsMensuel = 1640000;
-      totalDepensesHebdo = 120000; totalDepensesMensuel = 450000;
-    }
-    let benHebdo = totalVentesHebdo - totalIntrantsHebdo - totalDepensesHebdo;
-    let benMensuel = totalVentesMensuel - totalIntrantsMensuel - totalDepensesMensuel;
-    let tauxRentab = totalVentesMensuel > 0 ? Math.round((benMensuel / totalVentesMensuel) * 100) : 0;
-    
-    let comm = "";
-    if (tauxRentab > 25) {
-      comm = `<span class="badge-rentable">🟢 EXCELLENTE RENTABILITÉ (${tauxRentab}%)</span><br>Coûts maîtrisés.`;
-    } else if (tauxRentab >= 10) {
-      comm = `<span class="badge-rentable" style="background:#fff3e0; color:#e65100;">🟡 RENTABILITÉ MOYENNE (${tauxRentab}%)</span>`;
-    } else {
-      comm = `<span class="badge-rentable" style="background:#ffebee; color:#c62828;">🔴 ALERTE FINANCIÈRE (${tauxRentab}%)</span>`;
-    }
-    mettreAJourUIChiffres(totalVentesHebdo, totalVentesMensuel, benHebdo, benMensuel, comm);
-  }
-
-  function extraireSommePeriodeLocal(cle, tempsCourant, limiteTemps) {
-    let historique = JSON.parse(localStorage.getItem("historique_finance_" + cle) || "[]");
-    return historique.filter(item => (tempsCourant - item.date) <= limiteTemps).reduce((somme, item) => somme + item.montant, 0);
-  }
-
-  function mettreAJourUIChiffres(caHebdo, caMensuel, benHebdo, benMensuel, commentaire) {
-    document.getElementById("cf-ca-hebdo").textContent = formatDeviseFCFA(caHebdo);
-    document.getElementById("cf-ca-mensuel").textContent = formatDeviseFCFA(caMensuel);
-    const elBenHebdo = document.getElementById("cf-ben-hebdo"); const elBenMensuel = document.getElementById("cf-ben-mensuel");
-    elBenHebdo.textContent = formatDeviseFCFA(benHebdo); elBenHebdo.style.color = benHebdo >= 0 ? "#2e7d32" : "#d32f2f";
-    elBenMensuel.textContent = formatDeviseFCFA(benMensuel); elBenMensuel.style.color = benMensuel >= 0 ? "#2e7d32" : "#d32f2f";
-    document.getElementById("cf-commentaire").innerHTML = commentaire;
-  }
-
-  function formatDeviseFCFA(valeur) { return new Intl.NumberFormat('fr-FR').format(valeur) + " FCFA"; }
-
-  function calculerEtMettreAJourIndicateurs() {
-    const partenaireCA = document.getElementById("partenaire-ca-hebdo");
-    const partenaireTx = document.getElementById("partenaire-tx-rentab");
-    if(partenaireCA) { partenaireCA.textContent = "850 000 FCFA"; partenaireTx.textContent = "28 %"; partenaireTx.style.color = "#2e7d32"; }
-  }
-</script>
-</body>
-</html>
+      let idLotSujet = document.getElementById("e_id").value
