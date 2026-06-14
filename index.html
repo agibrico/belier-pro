@@ -457,6 +457,30 @@ function initialiserDatesPartenaire() {
     
     filtrerDonneesPartenaire(); // Premier calcul automatique
 }
+function soumettreDonneesPorcher(event) {
+    event.preventDefault(); // Empêche le rechargement de la page
+
+    const nouvelleSaisie = {
+        date: new Date().toISOString(),
+        evenement: document.getElementById('porcher-evenement').value,
+        quantite: parseInt(document.getElementById('porcher-quantite').value),
+        observations: document.getElementById('porcher-observations').value,
+        auteur: "Porcher"
+    };
+
+    // 1. Sauvegarde locale immédiate (Gestion du Hors Ligne)
+    let attentesSynchronisation = JSON.parse(localStorage.getItem('attentes_sync')) || [];
+    attentesSynchronisation.push(nouvelleSaisie);
+    localStorage.setItem('attentes_sync', JSON.stringify(attentesSynchronisation));
+
+    alert("Données enregistrées localement ! Elles seront synchronisées dès le retour du réseau.");
+    document.getElementById('form-porcher').reset();
+
+    // 2. Tenter la synchronisation immédiate si le réseau est disponible
+    if (navigator.onLine) {
+        synchroniserDonneesAvecServeur();
+    }
+}
 
 function filtrerDonneesPartenaire() {
     const dateDebut = new Date(document.getElementById('partenaire-date-debut').value);
