@@ -116,6 +116,28 @@
 
   <div id="page-menu-admin" class="page">
     <h2>Espace Administrateur</h2>
+    <div id="ecran-selection-role" class="role-screen" style="display: block;">
+    <div class="header-titre" style="text-align: center; background-color: #1e5c27; color: white; padding: 20px; font-weight: bold; font-size: 22px;">
+        🐖 BÉLIER PRO
+    </div>
+    
+    <div style="padding: 25px; text-align: center; font-family: sans-serif;">
+        <h3 style="color: #333; margin-bottom: 25px; font-size: 18px;">Sélectionnez votre profil d'accès :</h3>
+        
+        <button onclick="afficherEcranParRole('admin')" style="display: block; width: 100%; padding: 16px; margin: 15px 0; font-size: 16px; font-weight: bold; border: none; border-radius: 8px; background-color: #1e5c27; color: white; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            👑 Directeur / Administrateur
+        </button>
+        
+        <button onclick="afficherEcranParRole('partenaire')" style="display: block; width: 100%; padding: 16px; margin: 15px 0; font-size: 16px; font-weight: bold; border: none; border-radius: 8px; background-color: #2e7d32; color: white; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            🤝 Associé / Partenaire
+        </button>
+        
+        <button onclick="afficherEcranParRole('porcher')" style="display: block; width: 100%; padding: 16px; margin: 15px 0; font-size: 16px; font-weight: bold; border: none; border-radius: 8px; background-color: #f57c00; color: white; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            🐖 Éleveur / Porcher
+        </button>
+    </div>
+</div>
+
     <div class="kpi-container">
       <strong>Tableau de Bord Centralisé</strong>
       <div class="kpi-row"><span>Cheptel Total vif:</span> <span id="kpi-cheptel">Calcul...</span></div>
