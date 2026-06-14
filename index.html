@@ -1595,7 +1595,8 @@ LES FERMES DU BÉLIER HTML DE RÉFÉRENCE
 
     <div id="espace-admin" class="page" style="display: none;">
         <div class="header-titre" style="text-align: center; background-color: #1e5c27; color: white; padding: 15px; font-weight: bold; font-size: 20px;">
-            👑 SESSION ADMINISTRATEUR
+         
+          👑 SESSION ADMINISTRATEUR
             <div style="padding: 15px;">
         
         <button style="display: block; width: 100%; padding: 14px; margin-bottom: 12px; background-color: #2e7d32; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 15px;">
@@ -1606,13 +1607,14 @@ LES FERMES DU BÉLIER HTML DE RÉFÉRENCE
             🪙 MODULE FINANCES
         </button>
 
-        <button onclick="ouvrirGestionUtilisateurs()" style="display: block; width: 100%; padding: 15px; margin-bottom: 12px; background-color: #0288d1; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.15);">
+                <button onclick="ouvrirGestionUtilisateurs()" style="display: block; width: 100%; padding: 15px; margin-bottom: 12px; background-color: #0288d1; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.15);">
             👥 AJOUTER PARTENAIRE / PORCHER
         </button>
         
         <button onclick="ouvrirConfigurationSessions()" style="display: block; width: 100%; padding: 15px; margin-bottom: 12px; background-color: #00897b; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.15);">
             ⚙️ CONFIGURER SESSIONS
         </button>
+
         
         <button style="display: block; width: 100%; padding: 14px; margin-bottom: 12px; background-color: #f57c00; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 15px;">
             🔄 RESTAURATION SYSTEME
@@ -1621,14 +1623,6 @@ LES FERMES DU BÉLIER HTML DE RÉFÉRENCE
         <button onclick="deconnexion()" style="display: block; width: 100%; padding: 14px; background-color: #c62828; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 15px;">
             🚪 DÉCONNEXION
         </button>
-
-    </div> ```
-
-### 📋 Ce que cela corrige :
-1. **Suppression du `</div>` à la ligne 120 :** Tous les boutons restent maintenant groupés dans le même bloc de style.
-2. **Fermeture propre :** Le bloc se ferme uniquement à la fin, après le bouton Déconnexion.
-
-Applique cette modification sur GitHub, valide-la, puis actualise l'application sur ton téléphone (au besoin dans un onglet privé pour éviter que l'ancien code reste en mémoire cache). Ton bouton vert va enfin apparaître à l'écran !
 
     </div>
 
