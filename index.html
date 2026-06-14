@@ -470,6 +470,12 @@ function deconnexion() {
     // On réaffiche l'écran de sélection des boutons
     document.getElementById('ecran-selection-role').style.display = 'block';
 }
+function activerInterface() {
+    // Sélectionne tous les boutons à l'intérieur de l'écran de sélection et les active
+    const boutons = document.querySelectorAll('#ecran-selection-role button');
+    boutons.forEach(btn => btn.removeAttribute('disabled'));
+    console.log("Application prête et boutons activés !");
+}
 
   function toggleAffichageMdp(idInput) {
     const x = document.getElementById(idInput);
