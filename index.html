@@ -1507,25 +1507,29 @@ function filtrerDonneesPartenaire() {
   }
 
   function permuterChampsEntreePorc(valeur) {
-    const divPorcelets = document.getElementById("bloc-entree-porcelets");
+    const divPorcelets = document.getElementById("bloc-entre-porcelets");
     const divPoids = document.getElementById("bloc-entree-poids");
     const divProvenance = document.getElementById("bloc-entree-provenance");
     const conteneur = document.getElementById("conteneur-e-id");
 
     if (valeur === "Lots de porcelets") {
-      if(divPorcelets) divPorcelets.style.display = "block";
-      if(divPoids) divPoids.style.display = "none";
-      if(divProvenance) divProvenance.style.display = "block";
-      gererProvenancePorcelets(document.getElementById("e_provenance")?.value || "Acheté");
+        if(divPorcelets) divPorcelets.style.display = "block";
+        if(divPoids) divPoids.style.display = "none";
+        if(divProvenance) divProvenance.style.display = "block";
+        if(divProvenance) {
+            const eProv = document.getElementById("e_provenance");
+            if(eProv) gererProvenancePorcelets(eProv.value || "Acheté");
+        }
     } else {
-      if(divPorcelets) divPorcelets.style.display = "none";
-      if(divPoids) divPoids.style.display = "block";
-      if(divProvenance) divProvenance.style.display = "none";
-      if(conteneur) {
-        conteneur.innerHTML = `<input type="text" id="e_id" placeholder="Ex: T-22 ou VERRAT-02" required>`;
-      }
+        if(divPorcelets) divPorcelets.style.display = "none";
+        if(divPoids) divPoids.style.display = "block";
+        if(divProvenance) divProvenance.style.display = "none";
+        if (conteneur) {
+            conteneur.innerHTML = '<input type="text" id="e_id" placeholder="Ex: T-22 ou VERRAT-02" required>';
+        }
     }
-  }
+}
+
 
   function calculerSommeVenteDirecte() {
     const pTotal = parseFloat(document.getElementById("v_poids_total").value || 0);
@@ -1556,11 +1560,12 @@ function filtrerDonneesPartenaire() {
   function permuterArchitectureSujetPorc(valeur) {
     // Maintenu pour la cohérence de l'arbre global des fonctions de scripts
   }
-
-  function verifierNouveauChoixIntrant(valeur, idConteneur) {
-    const target = document.getElementById(idConteneur);
-    if(target) target.style.display = (valeur === "Autre Intrant / Nouveau") ? "block" : "none";
-  }
+function verificateurNouveauChoixIntrant(valeur, idConteneur) {
+    const cible = document.getElementById(idConteneur);
+    if (cible) {
+        cible.style.display = (valeur === "Autre Intrant / Nouveau") ? "block" : "none";
+    }
+}
 
   function revenirDepuisFormulaire() { ouvrirEspaceRole(); }
 
