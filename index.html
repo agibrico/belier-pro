@@ -117,43 +117,65 @@
             
             
 
-  <div id="page-force-mdp" class="page">
-    <h3 style="color:var(--accent); margin-bottom:15px;">Première Connexion Sécurisée</h3>
-    <p style="font-size:12px; margin-bottom:15px;">Le mot de passe par défaut '0000' doit impérativement être personnalisé pour des raisons de traçabilité.</p>
-    <input type="hidden" id="force-id-user">
-    <div class="form-group">
-      <label>Nouveau Mot de Passe</label>
-      <input type="password" id="new-user-pass" placeholder="Saisir nouveau code secret">
-      <div class="checkbox-container">
-        <input type="checkbox" id="reveal-new-pass" onclick="toggleAffichageMdp('new-user-pass')">
-        <label for="reveal-new-pass">Rendre visible</label>
-      </div>
-    </div>
-    <button class="btn-accent" onclick="traiterMiseAJourMdp()">Enregistrer la clé</button>
-  </div>
-
-  <div id="page-menu-admin" class="page">
-    <h2>Espace Administrateur</h2>
-    <div id="ecran-selection-role" class="role-screen" style="display: block;">
-    <div class="header-titre" style="text-align: center; background-color: #1e5c27; color: white; padding: 20px; font-weight: bold; font-size: 22px;">
+  <div id="espace-admin" class="page" style="display: none;">
+    <div style="text-align: center; background-color: #1e5c27; color: white; padding: 15px; font-weight: bold;">
         🐖 BÉLIER PRO
     </div>
     
-    <div style="padding: 25px; text-align: center; font-family: sans-serif;">
-        <h3 style="color: #333; margin-bottom: 25px; font-size: 18px;">Sélectionnez votre profil d'accès :</h3>
-        
-        <button onclick="afficherEcranParRole('admin')" style="display: block; width: 100%; padding: 16px; margin: 15px 0; font-size: 16px; font-weight: bold; border: none; border-radius: 8px; background-color: #1e5c27; color: white; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-            👑 Directeur / Administrateur
+    <div style="margin: 10px; padding: 5px; background-color: #edf5e0; text-align: center; font-size: 14px; border-radius: 4px;">
+        🟢 CONNECTÉ (EN LIGNE) <span style="float: right;">Données Prêtes</span>
+    </div>
+    
+    <h2 style="padding-left: 15px; color: #333; font-size: 18px;">Espace Administrateur</h2>
+    
+    <div style="margin: 15px; padding: 15px; background-color: #f0f4f8; border-radius: 8px;">
+        <strong>Tableau de Bord Centralisé</strong><br>
+        <small>Cheptel Total vif : Calcul...</small><br>
+        <small>Mortalité cumulée : 0 sujet</small>
+    </div>
+    
+    <div style="padding: 15px;">
+        <button style="display: block; width: 100%; padding: 14px; margin-bottom: 12px; background-color: #2e7d32; color: white; border: none; border-radius: 8px; font-weight: bold;">
+            💼 GESTION DE MODULES
         </button>
         
-        <button onclick="afficherEcranParRole('partenaire')" style="display: block; width: 100%; padding: 16px; margin: 15px 0; font-size: 16px; font-weight: bold; border: none; border-radius: 8px; background-color: #2e7d32; color: white; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-            🤝 Associé / Partenaire
+        <button style="display: block; width: 100%; padding: 14px; margin-bottom: 12px; background-color: #2e7d32; color: white; border: none; border-radius: 8px; font-weight: bold;">
+            🪙 FINANCES DU MODULE
         </button>
         
-        <button onclick="afficherEcranParRole('porcher')" style="display: block; width: 100%; padding: 16px; margin: 15px 0; font-size: 16px; font-weight: bold; border: none; border-radius: 8px; background-color: #f57c00; color: white; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-            🐖 Éleveur / Porcher
+        <button onclick="ouvrirGestionUtilisateurs()" style="display: block; width: 100%; padding: 14px; margin-bottom: 12px; background-color: #0288d1; color: white; border: none; border-radius: 8px; font-weight: bold;">
+            👥 AJOUTER PARTENAIRE / PORCHER
+        </button>
+        
+        <button style="display: block; width: 100%; padding: 14px; margin-bottom: 12px; background-color: #f57c00; color: white; border: none; border-radius: 8px; font-weight: bold;">
+            🔄 SYSTÈME DE RESTAURATION
+        </button>
+        
+        <button onclick="deconnexion()" style="display: block; width: 100%; padding: 14px; background-color: #c62828; color: white; border: none; border-radius: 8px; font-weight: bold;">
+            DÉCONNEXION
         </button>
     </div>
+</div>
+
+<div id="page-force-mdp" class="page" style="display: none; padding: 20px;">
+    <h3 style="color: var(--accent); margin-bottom: 15px;">Première Connexion Sécurisée</h3>
+    <p style="font-size: 12px; margin-bottom: 15px;">Le mot de passe par défaut '0000' doit impérativement être changé.</p>
+    
+    <div class="groupe-formulaires">
+        <label>Nouveau mot de passe</label>
+        <input type="password" id="nouveau-passe-utilisateur" placeholder="Saisir nouveau code secret" style="width: 100%; padding: 10px; margin-top: 5px; box-sizing: border-box;">
+    </div>
+    
+    <div style="margin: 15px 0;">
+        <input type="checkbox" id="reveler-nouveau-pass" onclick="toggleAffichageMdp('nouveau-passe-utilisateur')">
+        <label for="reveler-nouveau-pass">Rendre visible</label>
+    </div>
+    
+    <button onclick="traiterMiseAJourMdp()" style="width: 100%; padding: 14px; background-color: #2e7d32; color: white; border: none; border-radius: 8px; font-weight: bold;">
+        Enregistrer la clé
+    </button>
+</div>
+
 </div>
     <button onclick="deconnexion()" style="display: block; width: 100%; padding: 14px; background-color: #c62828; color: white; border: none; border-radius: 8px; font-weight: bold;">
             DÉCONNEXION
