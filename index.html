@@ -439,22 +439,36 @@
       ns.style.color = "#c62828";
     }
   }
-// Fonction pour basculer d'un écran à l'autre selon le rôle
+// Fonction de navigation principale selon le rôle choisi
 function afficherEcranParRole(role) {
-    // On cache d'abord tous les écrans
+    // 1. On cache absolument TOUS les écrans au départ
+    document.getElementById('ecran-selection-role').style.display = 'none';
     document.getElementById('espace-admin').style.display = 'none';
     document.getElementById('espace-partenaire').style.display = 'none';
     document.getElementById('espace-porcher').style.display = 'none';
 
-    // On affiche l'écran correspondant au rôle
+    // 2. On affiche uniquement l'écran demandé
     if (role === 'admin') {
         document.getElementById('espace-admin').style.display = 'block';
     } else if (role === 'partenaire') {
         document.getElementById('espace-partenaire').style.display = 'block';
-        initialiserDatesPartenaire(); // Met les dates du mois en cours par défaut
+        if (typeof initialiserDatesPartenaire === "function") {
+            initialiserDatesPartenaire(); // Lance le filtre automatique du mois
+        }
     } else if (role === 'porcher') {
         document.getElementById('espace-porcher').style.display = 'block';
     }
+}
+
+// Fonction pour quitter un espace et revenir à la sélection des profils
+function deconnexion() {
+    // On cache les espaces de travail
+    document.getElementById('espace-admin').style.display = 'none';
+    document.getElementById('espace-partenaire').style.display = 'none';
+    document.getElementById('espace-porcher').style.display = 'none';
+    
+    // On réaffiche l'écran de sélection des boutons
+    document.getElementById('ecran-selection-role').style.display = 'block';
 }
 
   function toggleAffichageMdp(idInput) {
