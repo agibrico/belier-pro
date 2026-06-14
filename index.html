@@ -417,6 +417,23 @@
       ns.style.color = "#c62828";
     }
   }
+// Fonction pour basculer d'un écran à l'autre selon le rôle
+function afficherEcranParRole(role) {
+    // On cache d'abord tous les écrans
+    document.getElementById('espace-admin').style.display = 'none';
+    document.getElementById('espace-partenaire').style.display = 'none';
+    document.getElementById('espace-porcher').style.display = 'none';
+
+    // On affiche l'écran correspondant au rôle
+    if (role === 'admin') {
+        document.getElementById('espace-admin').style.display = 'block';
+    } else if (role === 'partenaire') {
+        document.getElementById('espace-partenaire').style.display = 'block';
+        initialiserDatesPartenaire(); // Met les dates du mois en cours par défaut
+    } else if (role === 'porcher') {
+        document.getElementById('espace-porcher').style.display = 'block';
+    }
+}
 
   function toggleAffichageMdp(idInput) {
     const x = document.getElementById(idInput);
