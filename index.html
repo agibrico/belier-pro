@@ -1,3 +1,4 @@
+LES FERMES DU BÉLIER HTML DE RÉFÉRENCE 
 
 <!DOCTYPE html>
 <html>
@@ -58,176 +59,58 @@
   </style>
 </head>
 <body>
-  <body>
 
-    <div id="ecran-selection-role" style="display: block;">
-        <div class="header-titre" style="text-align: center; background-color: #1e5c27; color: white; padding: 20px; font-weight: bold; font-size: 22px;">
-            🐖 BÉLIER PRO
-        </div>
-        <div style="padding: 25px; text-align: center; font-family: sans-serif;">
-            <h3 style="color: #333; margin-bottom: 25px;">Sélectionnez votre profil d'accès :</h3>
-            
-            <button onclick="afficherEcranParRole('admin')" style="display: block; width: 100%; padding: 16px; margin: 15px 0; font-size: 16px; font-weight: bold; border: none; border-radius: 8px; background-color: #1e5c27; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                👑 DIRECTEUR / ADMINISTRATEUR
-            </button>
-            
-            <button onclick="afficherEcranParRole('partenaire')" style="display: block; width: 100%; padding: 16px; margin: 15px 0; font-size: 16px; font-weight: bold; border: none; border-radius: 8px; background-color: #2e7d32; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                🤝 ASSOCIÉ / PARTENAIRE
-            </button>
-            
-            <button onclick="afficherEcranParRole('porcher')" style="display: block; width: 100%; padding: 16px; margin: 15px 0; font-size: 16px; font-weight: bold; border: none; border-radius: 8px; background-color: #f57c00; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                🐖 ÉLEVEUR / PORCHER
-            </button>
-        </div>
+<div class="container">
+  <header>
+    <h1>Bélier Pro</h1>
+  </header>
+
+  <div class="status-bar">
+    <span id="network-status">Vérification réseau...</span>
+    <span id="sync-status">Initialisation...</span>
+  </div>
+
+  <div id="alert-zone" class="alert-box alert-error"></div>
+
+  <div id="page-accueil" class="page active">
+    <button class="btn-primary" style="margin-top: 40px; padding: 30px;" onclick="basculerPage('page-login')">🐖 PROJET PORC</button>
+  </div>
+
+  <div id="page-login" class="page">
+    <h3 style="margin-bottom:15px; text-align:center;">Authentification Élevage</h3>
+    <div class="form-group">
+      <label>Utilisateur</label>
+      <input type="text" id="login-user" placeholder="Ex: ADMIN ou PORCHER1">
     </div>
-
-
-    <div id="espace-admin" style="display: none;">
-        <div class="header-titre" style="text-align: center; background-color: #1e5c27; color: white; padding: 15px; font-weight: bold;">
-            BÉLIER PRO
-        </div>
-        <div style="padding: 10px; background-color: #e8f5e9; text-align: center; font-size: 12px; color: #1e5c27; font-weight: bold;">
-            🟢 CONNECTÉ (EN LIGNE) <span style="float: right;">Données Prêtes</span>
-        </div>
-
-        <h2 style="padding-left: 15px; color: #333;">Espace Administrateur</h2>
-
-        <div style="margin: 15px; padding: 15px; background: #f0f4f8; border-radius: 8px;">
-            <strong>Tableau de Bord Centralisé</strong><br>
-            <small>Cheptel Total vif: Calcul...</small><br>
-            <small>Mortalité cumulée: 0 sujet</small>
-        </div>
-
-        <div style="padding: 15px;">
-            <button style="display: block; width: 100%; padding: 14px; margin-bottom: 12px; background-color: #2e7d32; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 15px;">
-                💼 MODULE GESTION
-            </button>
-            
-            <button style="display: block; width: 100%; padding: 14px; margin-bottom: 12px; background-color: #2e7d32; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 15px;">
-                🪙 MODULE FINANCES
-            </button>
-
-            <button onclick="ouvrirGestionUtilisateurs()" style="display: block; width: 100%; padding: 14px; margin-bottom: 12px; background-color: #0288d1; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 15px;">
-                👥 AJOUTER PARTENAIRE / PORCHER
-            </button>
-            
-            <button style="display: block; width: 100%; padding: 14px; margin-bottom: 12px; background-color: #f57c00; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 15px;">
-                🔄 RESTAURATION SYSTEME
-            </button>
-            
-            
-
-  <div id="espace-admin" class="page" style="display: none;">
-    <div style="text-align: center; background-color: #1e5c27; color: white; padding: 15px; font-weight: bold;">
-        🐖 BÉLIER PRO
+    <div class="form-group">
+      <label>Mot de passe</label>
+      <input type="password" id="login-pass" placeholder="****">
+      <div class="checkbox-container">
+        <input type="checkbox" id="reveal-pass" onclick="toggleAffichageMdp('login-pass')">
+        <label for="reveal-pass">Afficher le mot de passe</label>
+      </div>
     </div>
-    
-    <div style="margin: 10px; padding: 5px; background-color: #edf5e0; text-align: center; font-size: 14px; border-radius: 4px;">
-        🟢 CONNECTÉ (EN LIGNE) <span style="float: right;">Données Prêtes</span>
-    </div>
-    
-    <h2 style="padding-left: 15px; color: #333; font-size: 18px;">Espace Administrateur</h2>
-    
-    <div style="margin: 15px; padding: 15px; background-color: #f0f4f8; border-radius: 8px;">
-        <strong>Tableau de Bord Centralisé</strong><br>
-        <small>Cheptel Total vif : Calcul...</small><br>
-        <small>Mortalité cumulée : 0 sujet</small>
-    </div>
-    
-    <div style="padding: 15px;">
-        <button style="display: block; width: 100%; padding: 14px; margin-bottom: 12px; background-color: #2e7d32; color: white; border: none; border-radius: 8px; font-weight: bold;">
-            💼 GESTION DE MODULES
-        </button>
-        
-        <button style="display: block; width: 100%; padding: 14px; margin-bottom: 12px; background-color: #2e7d32; color: white; border: none; border-radius: 8px; font-weight: bold;">
-            🪙 FINANCES DU MODULE
-        </button>
-        
-        <button onclick="ouvrirGestionUtilisateurs()" style="display: block; width: 100%; padding: 14px; margin-bottom: 12px; background-color: #0288d1; color: white; border: none; border-radius: 8px; font-weight: bold;">
-            👥 AJOUTER PARTENAIRE / PORCHER
-        </button>
-        
-        <button style="display: block; width: 100%; padding: 14px; margin-bottom: 12px; background-color: #f57c00; color: white; border: none; border-radius: 8px; font-weight: bold;">
-            🔄 SYSTÈME DE RESTAURATION
-        </button>
-        
-        <button onclick="deconnexion()" style="display: block; width: 100%; padding: 14px; background-color: #c62828; color: white; border: none; border-radius: 8px; font-weight: bold;">
-            DÉCONNEXION
-        </button>
-    </div>
-</div>
+    <button class="btn-primary" onclick="traiterAuthentification()">Se Connecter</button>
+    <button class="btn-nav" onclick="basculerPage('page-accueil')">Retour</button>
+  </div>
 
-<div id="page-force-mdp" class="page" style="display: none; padding: 20px;">
-    <h3 style="color: var(--accent); margin-bottom: 15px;">Première Connexion Sécurisée</h3>
-    <p style="font-size: 12px; margin-bottom: 15px;">Le mot de passe par défaut '0000' doit impérativement être changé.</p>
-    
-    <div class="groupe-formulaires">
-        <label>Nouveau mot de passe</label>
-        <input type="password" id="nouveau-passe-utilisateur" placeholder="Saisir nouveau code secret" style="width: 100%; padding: 10px; margin-top: 5px; box-sizing: border-box;">
+  <div id="page-force-mdp" class="page">
+    <h3 style="color:var(--accent); margin-bottom:15px;">Première Connexion Sécurisée</h3>
+    <p style="font-size:12px; margin-bottom:15px;">Le mot de passe par défaut '0000' doit impérativement être personnalisé pour des raisons de traçabilité.</p>
+    <input type="hidden" id="force-id-user">
+    <div class="form-group">
+      <label>Nouveau Mot de Passe</label>
+      <input type="password" id="new-user-pass" placeholder="Saisir nouveau code secret">
+      <div class="checkbox-container">
+        <input type="checkbox" id="reveal-new-pass" onclick="toggleAffichageMdp('new-user-pass')">
+        <label for="reveal-new-pass">Rendre visible</label>
+      </div>
     </div>
-    
-    <div style="margin: 15px 0;">
-        <input type="checkbox" id="reveler-nouveau-pass" onclick="toggleAffichageMdp('nouveau-passe-utilisateur')">
-        <label for="reveler-nouveau-pass">Rendre visible</label>
-    </div>
-    
-    <button onclick="traiterMiseAJourMdp()" style="width: 100%; padding: 14px; background-color: #2e7d32; color: white; border: none; border-radius: 8px; font-weight: bold;">
-        Enregistrer la clé
-    </button>
-</div>
+    <button class="btn-accent" onclick="traiterMiseAJourMdp()">Enregistrer la clé</button>
+  </div>
 
-</div>
-    <button onclick="deconnexion()" style="display: block; width: 100%; padding: 14px; background-color: #c62828; color: white; border: none; border-radius: 8px; font-weight: bold;">
-            DÉCONNEXION
-        </button>
-    </div> 
-</div> <div id="espace-partenaire" class="page" style="display: none;">
-    </div>
-
-<div id="espace-porcher" class="page" style="display: none;">
-    </div>
-
-<div class="recipient">
-    <div class="en-tete">
-        <h1>Bélier Pro</h1>
-    </div>
-
-    <div class="barre-d-etat">
-        <span id="reseau-id">Vérification réseau...</span>
-        <span id="init-id">Initialisation...</span>
-    </div>
-</div>
-
-<div id="zone-alerte" class="boite-d-alerte erreur-d-alerte" style="display: none;"></div>
-
-<div id="page-accueil" class="page active">
-    <button onclick="basculerPage('ecran-selection-role')" class="bouton-primaire" style="margin-top: 40px; padding: 30px;">
-        🐖 PROJET PORC
-    </button>
-</div>
-
-<div id="ecran-selection-role" class="page" style="display: none;">
-    <h3 style="margin-bottom: 15px; text-align: center;">Authentification Éleveur</h3>
-    
-    <div class="groupe-de-formulaires">
-        <label>Utilisateur</label>
-        <input type="text" id="utilisateur-espace-reserve" placeholder="Ex : ADMIN ou PORCHER">
-    </div>
-    
-    <div class="groupe-de-formulaires">
-        <label>Mot de passe</label>
-        <input type="password" id="mot-de-passe-connexion-espace-reserve">
-        
-        <div class="conteneur-de-case-a-cocher">
-            <input type="checkbox" id="reveler-pass" onclick="toggleAffichageMdp('mot-de-passe-connexion-espace-reserve')">
-            <label for="reveler-pass">Afficher le mot de passe</label>
-        </div>
-    </div>
-
-    <button class="bouton-primaire" onclick="traiterAuthentification()">Se Connecter</button>
-    <button class="bouton-nav" onclick="basculerPage('page-accueil')">Retour</button>
-</div>
-
+  <div id="page-menu-admin" class="page">
+    <h2>Espace Administrateur</h2>
     <div class="kpi-container">
       <strong>Tableau de Bord Centralisé</strong>
       <div class="kpi-row"><span>Cheptel Total vif:</span> <span id="kpi-cheptel">Calcul...</span></div>
@@ -405,70 +288,6 @@
   </div>
 
 </div>
-<!-- ================= ESPACE PARTENAIRE ================= -->
-<div id="espace-partenaire" class="role-screen" style="display: none;">
-    <div class="header-titre">BÉLIER PRO - Partenaire</div>
-    
-    <!-- Tableau de bord Partenaire (SANS le bouton/infos Aliment) -->
-    <div class="dashboard-box">
-        <h3>📊 Tableau de Bord Centralisé</h3>
-        <div class="stats-grid">
-            <div class="stat-item">Cheptel Total vif: <span id="partenaire-cheptel">Calcul...</span></div>
-            <div class="stat-item">Mortalité cumulée: <span id="partenaire-mortalite">0 sujet</span></div>
-            <div class="stat-item">Recettes Période: <span id="partenaire-recettes">0 FCFA</span></div>
-            <div class="stat-item">Dépenses Période: <span id="partenaire-depenses">0 FCFA</span></div>
-        </div>
-    </div>
-
-    <!-- Case de sélection de période (Filtrage par date) -->
-    <div class="filter-box">
-        <label for="date-debut">Du :</label>
-        <input type="date" id="partenaire-date-debut">
-        <label for="date-fin">Au :</label>
-        <input type="date" id="partenaire-date-fin">
-        <button onclick="filtrerDonneesPartenaire()" class="btn-filtrer">Filtrer 🔍</button>
-    </div>
-
-    <!-- Boutons d'accès autorisés pour le Partenaire -->
-    <div class="menu-boutons">
-        <button class="btn-gestion">💼 MODULE GESTION</button>
-        <button class="btn-finances">🪙 MODULE FINANCES</button>
-        <button onclick="deconnexion()" class="btn-danger">DÉCONNEXION</button>
-    </div>
-</div>
-
-<!-- ================= ESPACE PORCHER ================= -->
-<div id="espace-porcher" class="role-screen" style="display: none;">
-    <div class="header-titre">BÉLIER PRO - Suivi Porcher</div>
-
-    <!-- Le porcher n'a accès qu'à la saisie de gestion -->
-    <div class="saisie-box">
-        <h3>📝 Enregistrement Quotidien (Gestion)</h3>
-        <form id="form-porcher" onsubmit="soumettreDonneesPorcher(event)">
-            <div class="form-group">
-                <label>Événement :</label>
-                <select id="porcher-evenement" required>
-                    <option value="Entree_Porc">Nouvelle Entrée / Naissance</option>
-                    <option value="Mortalite">Signalement Mortalité</option>
-                    <option value="Sante">Soins / Vaccination</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Quantité / Nombre :</label>
-                <input type="number" id="porcher-quantite" required min="1">
-            </div>
-            <div class="form-group">
-                <label>Observations / Notes :</label>
-                <textarea id="porcher-observations" rows="3" placeholder="Ex: Box numéro 4..."></textarea>
-            </div>
-            <button type="submit" class="btn-valider">💾 Enregistrer les données</button>
-        </form>
-    </div>
-
-    <div class="menu-boutons" style="margin-top: 20px;">
-        <button onclick="deconnexion()" class="btn-danger">DÉCONNEXION</button>
-    </div>
-</div>
 
 <script>
   let COMPTE_ROLE = "";
@@ -529,43 +348,6 @@
       ns.style.color = "#c62828";
     }
   }
-// Fonction de navigation principale selon le rôle choisi
-function afficherEcranParRole(role) {
-    // 1. On cache absolument TOUS les écrans au départ
-    document.getElementById('ecran-selection-role').style.display = 'none';
-    document.getElementById('espace-admin').style.display = 'none';
-    document.getElementById('espace-partenaire').style.display = 'none';
-    document.getElementById('espace-porcher').style.display = 'none';
-
-    // 2. On affiche uniquement l'écran demandé
-    if (role === 'admin') {
-        document.getElementById('espace-admin').style.display = 'block';
-    } else if (role === 'partenaire') {
-        document.getElementById('espace-partenaire').style.display = 'block';
-        if (typeof initialiserDatesPartenaire === "function") {
-            initialiserDatesPartenaire(); // Lance le filtre automatique du mois
-        }
-    } else if (role === 'porcher') {
-        document.getElementById('espace-porcher').style.display = 'block';
-    }
-}
-
-// Fonction pour quitter un espace et revenir à la sélection des profils
-function deconnexion() {
-    // On cache les espaces de travail
-    document.getElementById('espace-admin').style.display = 'none';
-    document.getElementById('espace-partenaire').style.display = 'none';
-    document.getElementById('espace-porcher').style.display = 'none';
-    
-    // On réaffiche l'écran de sélection des boutons
-    document.getElementById('ecran-selection-role').style.display = 'block';
-}
-function activerInterface() {
-    // Sélectionne tous les boutons à l'intérieur de l'écran de sélection et les active
-    const boutons = document.querySelectorAll('#ecran-selection-role button');
-    boutons.forEach(btn => btn.removeAttribute('disabled'));
-    console.log("Application prête et boutons activés !");
-}
 
   function toggleAffichageMdp(idInput) {
     const x = document.getElementById(idInput);
@@ -579,69 +361,7 @@ function activerInterface() {
     window.scrollTo(0,0);
     afficherMessage("", false);
   }
-// Initialise les inputs de date avec le mois actuel par défaut
-function initialiserDatesPartenaire() {
-    const aujourdhui = new Date();
-    const premierDuMois = new Date(aujourdhui.getFullYear(), aujourdhui.getMonth(), 1);
-    
-    document.getElementById('partenaire-date-fin').value = aujourdhui.toISOString().split('T')[0];
-    document.getElementById('partenaire-date-debut').value = premierDuMois.toISOString().split('T')[0];
-    
-    filtrerDonneesPartenaire(); // Premier calcul automatique
-}
-function soumettreDonneesPorcher(event) {
-    event.preventDefault(); // Empêche le rechargement de la page
 
-    const nouvelleSaisie = {
-        date: new Date().toISOString(),
-        evenement: document.getElementById('porcher-evenement').value,
-        quantite: parseInt(document.getElementById('porcher-quantite').value),
-        observations: document.getElementById('porcher-observations').value,
-        auteur: "Porcher"
-    };
-
-    // 1. Sauvegarde locale immédiate (Gestion du Hors Ligne)
-    let attentesSynchronisation = JSON.parse(localStorage.getItem('attentes_sync')) || [];
-    attentesSynchronisation.push(nouvelleSaisie);
-    localStorage.setItem('attentes_sync', JSON.stringify(attentesSynchronisation));
-
-    alert("Données enregistrées localement ! Elles seront synchronisées dès le retour du réseau.");
-    document.getElementById('form-porcher').reset();
-
-    // 2. Tenter la synchronisation immédiate si le réseau est disponible
-    if (navigator.onLine) {
-        synchroniserDonneesAvecServeur();
-    }
-}
-
-function filtrerDonneesPartenaire() {
-    const dateDebut = new Date(document.getElementById('partenaire-date-debut').value);
-    const dateFin = new Date(document.getElementById('partenaire-date-fin').value);
-    
-    // Récupération de vos données globales sauvegardées localement
-    const donneesGlobales = JSON.parse(localStorage.getItem('sauvegarde_ferme')) || {};
-    
-    // Exemple de filtrage des finances sur la période sélectionnée
-    let totalRecettes = 0;
-    let totalDepenses = 0;
-
-    if (donneesGlobales.Finances) {
-        donneesGlobales.Finances.forEach(ligne => {
-            const dateLigne = new Date(ligne.date); // Assurez-vous que le format de date correspond
-            if (dateLigne >= dateDebut && dateLigne <= dateFin) {
-                if (ligne.type === 'Recette') totalRecettes += parseFloat(ligne.montant || 0);
-                if (ligne.type === 'Depense') totalDepenses += parseFloat(ligne.montant || 0);
-            }
-        });
-    }
-
-    // Mise à jour de l'affichage du partenaire
-    document.getElementById('partenaire-recettes').textContent = totalRecettes.toLocaleString() + " FCFA";
-    document.getElementById('partenaire-depenses').textContent = totalDepenses.toLocaleString() + " FCFA";
-    
-    // Note : Les calculs de cheptel et de mortalité globale restent affichés normalement
-}
-  
   function afficherMessage(msg, isError = true) {
     const az = document.getElementById("alert-zone");
     if(!az) return;
@@ -1507,29 +1227,25 @@ function filtrerDonneesPartenaire() {
   }
 
   function permuterChampsEntreePorc(valeur) {
-    const divPorcelets = document.getElementById("bloc-entre-porcelets");
+    const divPorcelets = document.getElementById("bloc-entree-porcelets");
     const divPoids = document.getElementById("bloc-entree-poids");
     const divProvenance = document.getElementById("bloc-entree-provenance");
     const conteneur = document.getElementById("conteneur-e-id");
 
     if (valeur === "Lots de porcelets") {
-        if(divPorcelets) divPorcelets.style.display = "block";
-        if(divPoids) divPoids.style.display = "none";
-        if(divProvenance) divProvenance.style.display = "block";
-        if(divProvenance) {
-            const eProv = document.getElementById("e_provenance");
-            if(eProv) gererProvenancePorcelets(eProv.value || "Acheté");
-        }
+      if(divPorcelets) divPorcelets.style.display = "block";
+      if(divPoids) divPoids.style.display = "none";
+      if(divProvenance) divProvenance.style.display = "block";
+      gererProvenancePorcelets(document.getElementById("e_provenance")?.value || "Acheté");
     } else {
-        if(divPorcelets) divPorcelets.style.display = "none";
-        if(divPoids) divPoids.style.display = "block";
-        if(divProvenance) divProvenance.style.display = "none";
-        if (conteneur) {
-            conteneur.innerHTML = '<input type="text" id="e_id" placeholder="Ex: T-22 ou VERRAT-02" required>';
-        }
+      if(divPorcelets) divPorcelets.style.display = "none";
+      if(divPoids) divPoids.style.display = "block";
+      if(divProvenance) divProvenance.style.display = "none";
+      if(conteneur) {
+        conteneur.innerHTML = `<input type="text" id="e_id" placeholder="Ex: T-22 ou VERRAT-02" required>`;
+      }
     }
-}
-
+  }
 
   function calculerSommeVenteDirecte() {
     const pTotal = parseFloat(document.getElementById("v_poids_total").value || 0);
@@ -1560,12 +1276,11 @@ function filtrerDonneesPartenaire() {
   function permuterArchitectureSujetPorc(valeur) {
     // Maintenu pour la cohérence de l'arbre global des fonctions de scripts
   }
-function verificateurNouveauChoixIntrant(valeur, idConteneur) {
-    const cible = document.getElementById(idConteneur);
-    if (cible) {
-        cible.style.display = (valeur === "Autre Intrant / Nouveau") ? "block" : "none";
-    }
-}
+
+  function verifierNouveauChoixIntrant(valeur, idConteneur) {
+    const target = document.getElementById(idConteneur);
+    if(target) target.style.display = (valeur === "Autre Intrant / Nouveau") ? "block" : "none";
+  }
 
   function revenirDepuisFormulaire() { ouvrirEspaceRole(); }
 
@@ -1827,40 +1542,6 @@ function verificateurNouveauChoixIntrant(valeur, idConteneur) {
     const partenaireTx = document.getElementById("partenaire-tx-rentab");
     if(partenaireCA) { partenaireCA.textContent = "850 000 FCFA"; partenaireTx.textContent = "28 %"; partenaireTx.style.color = "#2e7d32"; }
   }
-  function afficherEcranParRole(role) {
-    // Étape 1 : On CACHE absolument tout le monde de manière stricte
-    document.getElementById('ecran-selection-role').style.display = 'none';
-    document.getElementById('espace-admin').style.display = 'none';
-    document.getElementById('espace-partenaire').style.display = 'none';
-    document.getElementById('espace-porcher').style.display = 'none';
-
-    // Étape 2 : On AFFICHE uniquement celui qui a été sélectionné
-    if (role === 'admin') {
-        document.getElementById('espace-admin').style.display = 'block';
-    } else if (role === 'partenaire') {
-        document.getElementById('espace-partenaire').style.display = 'block';
-        if (typeof initialiserDatesPartenaire === "function") initialiserDatesPartenaire();
-    } else if (role === 'porcher') {
-        document.getElementById('espace-porcher').style.display = 'block';
-    }
-}
-
-function deconnexion() {
-    // Au clic sur Déconnexion, on recache tout et on rouvre uniquement l'accueil du haut
-    document.getElementById('espace-admin').style.display = 'none';
-    document.getElementById('espace-partenaire').style.display = 'none';
-    document.getElementById('espace-porcher').style.display = 'none';
-    
-    document.getElementById('ecran-selection-role').style.display = 'block';
-}
-
-// Fonction déclenchée par votre nouveau bouton Administrateur
-function ouvrirGestionUtilisateurs() {
-    // Pour tester le clic dans un premier temps :
-    alert("Ouverture du panneau de configuration des partenaires et porchers !");
-    // Ici, vous pourrez ouvrir un formulaire pop-up ou rediriger vers une page dédiée d'affectation
-}
-
 </script>
 </body>
 </html>
