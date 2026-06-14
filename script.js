@@ -15,7 +15,8 @@ async function initialiserApplication() {
     if (!navigator.onLine) {
         remplacerTexteConfiguration("Hors ligne 🔴", "Mode local activé");
         activerInterface();
-        return; // On s'arrête là et on charge le mode local
+        basculerPage('page-accueil'); // Force l'affichage de l'accueil
+        return; 
     }
 
     remplacerTexteConfiguration("En ligne 🟢", "Connexion au serveur...");
@@ -23,8 +24,9 @@ async function initialiserApplication() {
     // 2. Lancement de la récupération unique des données
     await chargerDonnees();
 
-    // 3. Quoi qu'il arrive, on libère l'interface
+    // 3. Quoi qu'il arrive, on libère l'interface et on affiche l'accueil
     activerInterface();
+    basculerPage('page-accueil');
 }
 
 // ==========================================================
@@ -64,6 +66,51 @@ async function chargerDonnees() {
 }
 
 // ==========================================================
+// NAVIGATION ET GESTION DES RÔLES / ÉCRANS
+// ==========================================================
+
+// Moteur de bascule des pages (Nettoie les classes actives pour éviter les doublons)
+function basculerPage(idPage) {
+    document.querySelectorAll('.page').forEach(p => {
+        p.classList.remove('active');
+        p.style.display = 'none'; // Sécurité supplémentaire anti-superposition
+    });
+
+    const targetPage = document.getElementById(idPage);
+    if (targetPage) {
+        targetPage.classList.add('active');
+        targetPage.style.display = 'block';
+    }
+    window.scrollTo(0, 0);
+}
+
+// Fonction pour orienter l'utilisateur selon le bouton cliqué
+function afficherEcranParRole(role) {
+    if (role === 'admin') {
+        basculerPage('espace-admin');
+    } else if (role === 'partenaire') {
+        basculerPage('espace-partenaire');
+        if (typeof initialiserDatesPartenaire === "function") {
+            initialiserDatesPartenaire();
+        }
+    } else if (role === 'porcher') {
+        basculerPage('espace-porcher');
+    }
+}
+
+// Fonction de déconnexion universelle
+function deconnexion() {
+    // Renvoie proprement à l'écran intermédiaire des 3 boutons
+    basculerPage('ecran-selection-role');
+}
+
+// Fonction liée au nouveau bouton bleu de la session Administrateur
+function ouvrirGestionUtilisateurs() {
+    alert("Ouverture de l'interface d'ajout et de configuration pour un nouveau PARTENAIRE ou PORCHER.");
+    // Plus tard, tu pourras utiliser basculerPage('page-creation-compte') ici
+}
+
+// ==========================================================
 // ENVOI DES DONNÉES DU FORMULAIRE (ENTRÉE PORC)
 // ==========================================================
 function envoyerEntreePorc(donneesFormulaire) {
@@ -94,11 +141,10 @@ function envoyerEntreePorc(donneesFormulaire) {
 }
 
 // ==========================================================
-// FONCTIONS COQUILLES / INTERFACE (À adapter avec tes ID HTML)
+// FONCTIONS DE L'INTERFACE GRAPHIQUE
 // ==========================================================
 function activerInterface() {
     console.log("Interface débloquée !");
-    // Exemple : document.getElementById('btn-porc').removeAttribute('disabled');
 }
 
 function remplacerTexteConfiguration(texteReseau, texteInit) {
@@ -107,44 +153,4 @@ function remplacerTexteConfiguration(texteReseau, texteInit) {
     
     if (divReseau) divReseau.textContent = texteReseau;
     if (divInit) divInit.textContent = texteInit;
-}
-// Fonction pour orienter l'utilisateur selon le bouton cliqué
-function afficherEcranParRole(role) {
-    if (role === 'admin') {
-        basculerPage('espace-admin');
-    } else if (role === 'partenaire') {
-        basculerPage('espace-partenaire');
-        if (typeof initialiserDatesPartenaire === "function") {
-            initialiserDatesPartenaire();
-        }
-    } else if (role === 'porcher') {
-        basculerPage('espace-porcher');
-    }
-}
-
-// Fonction liée au nouveau bouton bleu de la session Administrateur
-function ouvrirGestionUtilisateurs() {
-    alert("Ouverture de l'interface d'ajout et de configuration pour un nouveau PARTENAIRE ou PORCHER.");
-    // Plus tard, tu pourras utiliser basculerPage('page-creation-compte') ici
-}
-
-// Fonction de déconnexion universelle
-function deconnexion() {
-    // Renvoie proprement à l'écran intermédiaire des 3 boutons
-    basculerPage('ecran-selection-role');
-}
-
-// Moteur de bascule des pages (Nettoie les classes actives pour éviter les doublons)
-function basculerPage(idPage) {
-    document.querySelectorAll('.page').forEach(p => {
-        p.classList.remove('active');
-        p.style.display = 'none'; // Sécurité supplémentaire anti-superposition
-    });
-
-    const targetPage = document.getElementById(idPage);
-    if (targetPage) {
-        targetPage.classList.add('active');
-        targetPage.style.display = 'block';
-    }
-    window.scrollTo(0, 0);
 }
