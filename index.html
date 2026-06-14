@@ -115,61 +115,7 @@
                 🔄 RESTAURATION SYSTEME
             </button>
             
-            <button onclick="deconnexion()" style="display: block; width: 100%; padding: 14px; background-color: #c62828; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 15px;">
-                DÉCONNEXION
-            </button>
-        </div>
-    </div>
-
-
-    <div id="espace-partenaire" style="display: none;">
-        </div>
-
-    <div id="espace-porcher" style="display: none;">
-        </div>
-
-</body>
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
-<meta name="theme-color" content="#1e5c27">
-
-<div class="container">
-  <header>
-    <h1>Bélier Pro</h1>
-  </header>
-
-  <div class="status-bar">
-    <span id="network-status">Vérification réseau...</span>
-    <span id="sync-status">Initialisation...</span>
-  </div>
-
-  <div id="alert-zone" class="alert-box alert-error"></div>
-
-  <div id="page-accueil" class="page active">
-    <button class="btn-primary" style="margin-top: 40px; padding: 30px;" onclick="basculerPage('page-login')">🐖 PROJET PORC</button>
-  </div>
-
-  <div id="page-login" class="page">
-    <h3 style="margin-bottom:15px; text-align:center;">Authentification Élevage</h3>
-    <div class="form-group">
-      <label>Utilisateur</label>
-      <input type="text" id="login-user" placeholder="Ex: ADMIN ou PORCHER1">
-    </div>
-    <div class="form-group">
-      <label>Mot de passe</label>
-      <input type="password" id="login-pass" placeholder="****">
-      <div class="checkbox-container">
-        <input type="checkbox" id="reveal-pass" onclick="toggleAffichageMdp('login-pass')">
-        <label for="reveal-pass">Afficher le mot de passe</label>
-      </div>
-    </div>
-    <button class="btn-primary" onclick="traiterAuthentification()">Se Connecter</button>
-    <button class="btn-nav" onclick="basculerPage('page-accueil')">Retour</button>
-  </div>
+            
 
   <div id="page-force-mdp" class="page">
     <h3 style="color:var(--accent); margin-bottom:15px;">Première Connexion Sécurisée</h3>
@@ -208,6 +154,56 @@
             🐖 Éleveur / Porcher
         </button>
     </div>
+</div>
+    <button onclick="deconnexion()" style="display: block; width: 100%; padding: 14px; background-color: #c62828; color: white; border: none; border-radius: 8px; font-weight: bold;">
+            DÉCONNEXION
+        </button>
+    </div> 
+</div> <div id="espace-partenaire" class="page" style="display: none;">
+    </div>
+
+<div id="espace-porcher" class="page" style="display: none;">
+    </div>
+
+<div class="recipient">
+    <div class="en-tete">
+        <h1>Bélier Pro</h1>
+    </div>
+
+    <div class="barre-d-etat">
+        <span id="reseau-id">Vérification réseau...</span>
+        <span id="init-id">Initialisation...</span>
+    </div>
+</div>
+
+<div id="zone-alerte" class="boite-d-alerte erreur-d-alerte" style="display: none;"></div>
+
+<div id="page-accueil" class="page active">
+    <button onclick="basculerPage('ecran-selection-role')" class="bouton-primaire" style="margin-top: 40px; padding: 30px;">
+        🐖 PROJET PORC
+    </button>
+</div>
+
+<div id="ecran-selection-role" class="page" style="display: none;">
+    <h3 style="margin-bottom: 15px; text-align: center;">Authentification Éleveur</h3>
+    
+    <div class="groupe-de-formulaires">
+        <label>Utilisateur</label>
+        <input type="text" id="utilisateur-espace-reserve" placeholder="Ex : ADMIN ou PORCHER">
+    </div>
+    
+    <div class="groupe-de-formulaires">
+        <label>Mot de passe</label>
+        <input type="password" id="mot-de-passe-connexion-espace-reserve">
+        
+        <div class="conteneur-de-case-a-cocher">
+            <input type="checkbox" id="reveler-pass" onclick="toggleAffichageMdp('mot-de-passe-connexion-espace-reserve')">
+            <label for="reveler-pass">Afficher le mot de passe</label>
+        </div>
+    </div>
+
+    <button class="bouton-primaire" onclick="traiterAuthentification()">Se Connecter</button>
+    <button class="bouton-nav" onclick="basculerPage('page-accueil')">Retour</button>
 </div>
 
     <div class="kpi-container">
