@@ -33,14 +33,13 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 async function initialiserApplication() {
-    // Remplacer par les sélecteurs réels de votre code
-    const statusReseau = document.body; // ou l'élément qui affiche "Vérification réseau..."
+    const statusReseau = document.body; 
     
     // 1. Détection immédiate du réseau
     if (!navigator.onLine) {
         remplacerTexteConfiguration("Hors ligne 🔴", "Mode local activé");
         activerInterface();
-        return; // On s'arrête là et on débloque l'application
+        return; 
     }
 
     remplacerTexteConfiguration("En ligne 🟢", "Connexion au serveur...");
@@ -50,17 +49,16 @@ async function initialiserApplication() {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 4000); // 4 secondes max d'attente
 
-        // Remplacez par votre URL de déploiement Google Apps Script
-        const response = await fetch('VOTRE_URL_GOOGLE_APPS_SCRIPT', {
+        // 🔥 LA CORRECTION EST ICI : On utilise SCRIPT_URL (ton lien Google)
+        const response = await fetch(SCRIPT_URL, {
             signal: controller.signal
         });
         
         clearTimeout(timeoutId);
         const donneesFeuilles = await response.json();
 
-        // On sauvegarde les données fraîches dans le téléphone pour la prochaine fois
+        // Sauvegarde dans le téléphone
         localStorage.setItem('sauvegarde_ferme', JSON.stringify(donneesFeuilles));
-        
         remplacerTexteConfiguration("En ligne 🟢", "Prêt !");
 
     } catch (error) {
@@ -71,6 +69,7 @@ async function initialiserApplication() {
     // 3. Quoi qu'il arrive, on libère l'interface !
     activerInterface();
 }
+
 
 function activerInterface() {
     // Code pour rendre votre bouton "PROJET PORC" actif et cliquable
