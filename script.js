@@ -1,6 +1,71 @@
+// ==========================================================
+// CONFIGURATION GLOBALE
+// ==========================================================
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwLoVBoydPMt1JSYTZ0IE3P4cF1DNeREbFGw0AueNv09XH_shxuUH-GlEFH65tvRJ46JA/exec";
 
-// Fonction à déclencher lors de la soumission du formulaire d'entrée
+// ==========================================================
+// INITIALISATION DE L'APPLICATION (Au chargement de la page)
+// ==========================================================
+window.addEventListener('DOMContentLoaded', () => {
+    initialiserApplication();
+});
+
+async function initialiserApplication() {
+    // 1. Détection immédiate du réseau
+    if (!navigator.onLine) {
+        remplacerTexteConfiguration("Hors ligne 🔴", "Mode local activé");
+        activerInterface();
+        return; // On s'arrête là et on charge le mode local
+    }
+
+    remplacerTexteConfiguration("En ligne 🟢", "Connexion au serveur...");
+
+    // 2. Lancement de la récupération unique des données
+    await chargerDonnees();
+
+    // 3. Quoi qu'il arrive, on libère l'interface
+    activerInterface();
+}
+
+// ==========================================================
+// FONCTION DE CHARGEMENT UNIQUE (Pas de boucle infinie !)
+// ==========================================================
+async function chargerDonnees() {
+    if (!navigator.onLine) {
+        console.log("Offline mode: loading local data.");
+        return;
+    }
+
+    try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 4000); // 4 secondes max d'attente
+
+        // Appel propre avec l'action demandée par ton Apps Script
+        const response = await fetch(SCRIPT_URL + "?action=obtenirDonnees", {
+            signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        
+        const donneesFeuilles = await response.json();
+
+        // Sauvegarde des données fraîches dans le téléphone pour le mode hors-ligne
+        localStorage.setItem('sauvegarde_ferme', JSON.stringify(donneesFeuilles));
+        remplacerTexteConfiguration("En ligne 🟢", "Prêt !");
+
+    } catch (error) {
+        console.log("Le serveur est indisponible ou long. Passage en mode local :", error);
+        remplacerTexteConfiguration("Mode dégradé ⚠️", "Données locales chargées");
+    }
+}
+
+// ==========================================================
+// ENVOI DES DONNÉES DU FORMULAIRE (ENTRÉE PORC)
+// ==========================================================
 function envoyerEntreePorc(donneesFormulaire) {
   const payload = {
     id: donneesFormulaire.id,              // ex: "PORC-001"
@@ -9,7 +74,7 @@ function envoyerEntreePorc(donneesFormulaire) {
     poids: donneesFormulaire.poids,        // ex: 45
     date_entree: donneesFormulaire.date,  // ex: "2026-06-13"
     role: donneesFormulaire.role,          // ex: "Engraissement"
-    quantite_actuelle: donneesFormulaire.quantite // Nombre de porcs dans le lot
+    quantite_actuelle: donneesFormulaire.quantite 
   };
 
   fetch(SCRIPT_URL, {
@@ -27,60 +92,19 @@ function envoyerEntreePorc(donneesFormulaire) {
   })
   .catch(err => console.error("Erreur de réseau :", err));
 }
-// Au chargement de la page
-window.addEventListener('DOMContentLoaded', () => {
-    initialiserApplication();
-});
 
-async function initialiserApplication() {
-    const statusReseau = document.body; 
-    
-    // 1. Détection immédiate du réseau
-    if (!navigator.onLine) {
-        remplacerTexteConfiguration("Hors ligne 🔴", "Mode local activé");
-        activerInterface();
-        return; 
-    }
-
-    remplacerTexteConfiguration("En ligne 🟢", "Connexion au serveur...");
-
-    // 2. Tentative de récupération des données Google Sheets avec Sécurité (Timeout)
-    try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 4000); // 4 secondes max d'attente
-
-        // 🔥 LA CORRECTION EST ICI : On utilise SCRIPT_URL (ton lien Google)
-        const response = await fetch(SCRIPT_URL, {
-            signal: controller.signal
-        });
-        
-        clearTimeout(timeoutId);
-        const donneesFeuilles = await response.json();
-
-        // Sauvegarde dans le téléphone
-        localStorage.setItem('sauvegarde_ferme', JSON.stringify(donneesFeuilles));
-        remplacerTexteConfiguration("En ligne 🟢", "Prêt !");
-
-    } catch (error) {
-        console.log("Le serveur est indisponible ou long. Passage en mode local :", error);
-        remplacerTexteConfiguration("Mode dégradé ⚠️", "Données locales chargées");
-    }
-
-    // 3. Quoi qu'il arrive, on libère l'interface !
-    activerInterface();
-}
-
-
+// ==========================================================
+// FONCTIONS COQUILLES / INTERFACE (À adapter avec tes ID HTML)
+// ==========================================================
 function activerInterface() {
-    // Code pour rendre votre bouton "PROJET PORC" actif et cliquable
-    // Exemple : document.getElementById('btn-porc').removeAttribute('disabled');
     console.log("Interface débloquée !");
+    // Exemple : document.getElementById('btn-porc').removeAttribute('disabled');
 }
 
 function remplacerTexteConfiguration(texteReseau, texteInit) {
-    // Adaptez ce code avec vos propres ID ou classes HTML
-    // Exemple : 
-    // document.getElementById('reseau-id').textContent = texteReseau;
-    // document.getElementById('init-id').textContent = texteInit;
+    const divReseau = document.getElementById('reseau-id');
+    const divInit = document.getElementById('init-id');
+    
+    if (divReseau) divReseau.textContent = texteReseau;
+    if (divInit) divInit.textContent = texteInit;
 }
-
