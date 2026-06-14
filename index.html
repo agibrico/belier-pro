@@ -293,6 +293,70 @@
   </div>
 
 </div>
+<!-- ================= ESPACE PARTENAIRE ================= -->
+<div id="espace-partenaire" class="role-screen" style="display: none;">
+    <div class="header-titre">BÉLIER PRO - Partenaire</div>
+    
+    <!-- Tableau de bord Partenaire (SANS le bouton/infos Aliment) -->
+    <div class="dashboard-box">
+        <h3>📊 Tableau de Bord Centralisé</h3>
+        <div class="stats-grid">
+            <div class="stat-item">Cheptel Total vif: <span id="partenaire-cheptel">Calcul...</span></div>
+            <div class="stat-item">Mortalité cumulée: <span id="partenaire-mortalite">0 sujet</span></div>
+            <div class="stat-item">Recettes Période: <span id="partenaire-recettes">0 FCFA</span></div>
+            <div class="stat-item">Dépenses Période: <span id="partenaire-depenses">0 FCFA</span></div>
+        </div>
+    </div>
+
+    <!-- Case de sélection de période (Filtrage par date) -->
+    <div class="filter-box">
+        <label for="date-debut">Du :</label>
+        <input type="date" id="partenaire-date-debut">
+        <label for="date-fin">Au :</label>
+        <input type="date" id="partenaire-date-fin">
+        <button onclick="filtrerDonneesPartenaire()" class="btn-filtrer">Filtrer 🔍</button>
+    </div>
+
+    <!-- Boutons d'accès autorisés pour le Partenaire -->
+    <div class="menu-boutons">
+        <button class="btn-gestion">💼 MODULE GESTION</button>
+        <button class="btn-finances">🪙 MODULE FINANCES</button>
+        <button onclick="deconnexion()" class="btn-danger">DÉCONNEXION</button>
+    </div>
+</div>
+
+<!-- ================= ESPACE PORCHER ================= -->
+<div id="espace-porcher" class="role-screen" style="display: none;">
+    <div class="header-titre">BÉLIER PRO - Suivi Porcher</div>
+
+    <!-- Le porcher n'a accès qu'à la saisie de gestion -->
+    <div class="saisie-box">
+        <h3>📝 Enregistrement Quotidien (Gestion)</h3>
+        <form id="form-porcher" onsubmit="soumettreDonneesPorcher(event)">
+            <div class="form-group">
+                <label>Événement :</label>
+                <select id="porcher-evenement" required>
+                    <option value="Entree_Porc">Nouvelle Entrée / Naissance</option>
+                    <option value="Mortalite">Signalement Mortalité</option>
+                    <option value="Sante">Soins / Vaccination</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Quantité / Nombre :</label>
+                <input type="number" id="porcher-quantite" required min="1">
+            </div>
+            <div class="form-group">
+                <label>Observations / Notes :</label>
+                <textarea id="porcher-observations" rows="3" placeholder="Ex: Box numéro 4..."></textarea>
+            </div>
+            <button type="submit" class="btn-valider">💾 Enregistrer les données</button>
+        </form>
+    </div>
+
+    <div class="menu-boutons" style="margin-top: 20px;">
+        <button onclick="deconnexion()" class="btn-danger">DÉCONNEXION</button>
+    </div>
+</div>
 
 <script>
   let COMPTE_ROLE = "";
