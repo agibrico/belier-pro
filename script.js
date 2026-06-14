@@ -27,3 +27,61 @@ function envoyerEntreePorc(donneesFormulaire) {
   })
   .catch(err => console.error("Erreur de réseau :", err));
 }
+// Au chargement de la page
+window.addEventListener('DOMContentLoaded', () => {
+    initialiserApplication();
+});
+
+async function initialiserApplication() {
+    // Remplacer par les sélecteurs réels de votre code
+    const statusReseau = document.body; // ou l'élément qui affiche "Vérification réseau..."
+    
+    // 1. Détection immédiate du réseau
+    if (!navigator.onLine) {
+        remplacerTexteConfiguration("Hors ligne 🔴", "Mode local activé");
+        activerInterface();
+        return; // On s'arrête là et on débloque l'application
+    }
+
+    remplacerTexteConfiguration("En ligne 🟢", "Connexion au serveur...");
+
+    // 2. Tentative de récupération des données Google Sheets avec Sécurité (Timeout)
+    try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 4000); // 4 secondes max d'attente
+
+        // Remplacez par votre URL de déploiement Google Apps Script
+        const response = await fetch('VOTRE_URL_GOOGLE_APPS_SCRIPT', {
+            signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        const donneesFeuilles = await response.json();
+
+        // On sauvegarde les données fraîches dans le téléphone pour la prochaine fois
+        localStorage.setItem('sauvegarde_ferme', JSON.stringify(donneesFeuilles));
+        
+        remplacerTexteConfiguration("En ligne 🟢", "Prêt !");
+
+    } catch (error) {
+        console.log("Le serveur est indisponible ou long. Passage en mode local :", error);
+        remplacerTexteConfiguration("Mode dégradé ⚠️", "Données locales chargées");
+    }
+
+    // 3. Quoi qu'il arrive, on libère l'interface !
+    activerInterface();
+}
+
+function activerInterface() {
+    // Code pour rendre votre bouton "PROJET PORC" actif et cliquable
+    // Exemple : document.getElementById('btn-porc').removeAttribute('disabled');
+    console.log("Interface débloquée !");
+}
+
+function remplacerTexteConfiguration(texteReseau, texteInit) {
+    // Adaptez ce code avec vos propres ID ou classes HTML
+    // Exemple : 
+    // document.getElementById('reseau-id').textContent = texteReseau;
+    // document.getElementById('init-id').textContent = texteInit;
+}
+
