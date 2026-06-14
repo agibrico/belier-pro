@@ -1804,6 +1804,40 @@ function filtrerDonneesPartenaire() {
     const partenaireTx = document.getElementById("partenaire-tx-rentab");
     if(partenaireCA) { partenaireCA.textContent = "850 000 FCFA"; partenaireTx.textContent = "28 %"; partenaireTx.style.color = "#2e7d32"; }
   }
+  function afficherEcranParRole(role) {
+    // Étape 1 : On CACHE absolument tout le monde de manière stricte
+    document.getElementById('ecran-selection-role').style.display = 'none';
+    document.getElementById('espace-admin').style.display = 'none';
+    document.getElementById('espace-partenaire').style.display = 'none';
+    document.getElementById('espace-porcher').style.display = 'none';
+
+    // Étape 2 : On AFFICHE uniquement celui qui a été sélectionné
+    if (role === 'admin') {
+        document.getElementById('espace-admin').style.display = 'block';
+    } else if (role === 'partenaire') {
+        document.getElementById('espace-partenaire').style.display = 'block';
+        if (typeof initialiserDatesPartenaire === "function") initialiserDatesPartenaire();
+    } else if (role === 'porcher') {
+        document.getElementById('espace-porcher').style.display = 'block';
+    }
+}
+
+function deconnexion() {
+    // Au clic sur Déconnexion, on recache tout et on rouvre uniquement l'accueil du haut
+    document.getElementById('espace-admin').style.display = 'none';
+    document.getElementById('espace-partenaire').style.display = 'none';
+    document.getElementById('espace-porcher').style.display = 'none';
+    
+    document.getElementById('ecran-selection-role').style.display = 'block';
+}
+
+// Fonction déclenchée par votre nouveau bouton Administrateur
+function ouvrirGestionUtilisateurs() {
+    // Pour tester le clic dans un premier temps :
+    alert("Ouverture du panneau de configuration des partenaires et porchers !");
+    // Ici, vous pourrez ouvrir un formulaire pop-up ou rediriger vers une page dédiée d'affectation
+}
+
 </script>
 </body>
 </html>
