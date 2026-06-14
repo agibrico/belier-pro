@@ -1543,5 +1543,98 @@ LES FERMES DU BÉLIER HTML DE RÉFÉRENCE
     if(partenaireCA) { partenaireCA.textContent = "850 000 FCFA"; partenaireTx.textContent = "28 %"; partenaireTx.style.color = "#2e7d32"; }
   }
 </script>
+      <div class="recipient">
+        <div class="en-tete">
+            <h1>Bélier Pro</h1>
+        </div>
+
+        <div class="barre-d-etat">
+            <span id="reseau-id">Vérification réseau...</span>
+            <span id="init-id">Initialisation...</span>
+        </div>
+    </div>
+
+    <div id="zone-alerte" class="boite-d-alerte erreur-d-alerte" style="display: none;"></div>
+
+
+    <div id="page-accueil" class="page active">
+        <div class="header-titre" style="text-align: center; background-color: #1e5c27; color: white; padding: 25px; font-weight: bold; font-size: 24px;">
+            🐖 LES FERMES DU BÉLIER
+        </div>
+        <div style="padding: 50px 20px; text-align: center;">
+            <button onclick="basculerPage('ecran-selection-role')" class="bouton-primaire" style="display: block; width: 100%; padding: 25px; background-color: #1e5c27; color: white; border: none; border-radius: 12px; font-size: 20px; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.2); cursor: pointer;">
+                🐖 PROJET PORC
+            </button>
+        </div>
+    </div>
+
+    <div id="ecran-selection-role" class="page" style="display: none;">
+        <div class="header-titre" style="text-align: center; background-color: #1e5c27; color: white; padding: 20px; font-weight: bold; font-size: 22px;">
+            🔐 CONNEXION SYSTÈME
+        </div>
+        <div style="padding: 25px; text-align: center; font-family: sans-serif;">
+            <h3 style="color: #333; margin-bottom: 25px; font-size: 18px;">Sélectionnez votre profil d'accès :</h3>
+            
+            <button onclick="afficherEcranParRole('admin')" style="display: block; width: 100%; padding: 18px; margin: 15px 0; font-size: 16px; font-weight: bold; border: none; border-radius: 8px; background-color: #1e5c27; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); cursor: pointer;">
+                👑 ADMINISTRATEUR
+            </button>
+            
+            <button onclick="afficherEcranParRole('partenaire')" style="display: block; width: 100%; padding: 18px; margin: 15px 0; font-size: 16px; font-weight: bold; border: none; border-radius: 8px; background-color: #2e7d32; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); cursor: pointer;">
+                🤝 PARTENAIRE
+            </button>
+            
+            <button onclick="afficherEcranParRole('porcher')" style="display: block; width: 100%; padding: 18px; margin: 15px 0; font-size: 16px; font-weight: bold; border: none; border-radius: 8px; background-color: #f57c00; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); cursor: pointer;">
+                🐖 PORCHER
+            </button>
+
+            <button onclick="basculerPage('page-accueil')" style="display: block; width: 100%; padding: 12px; margin-top: 30px; background-color: #757575; color: white; border: none; border-radius: 8px; font-weight: bold;">
+                ⬅️ RETOUR ACCUEIL
+            </button>
+        </div>
+    </div>
+
+    <div id="espace-admin" class="page" style="display: none;">
+        <div class="header-titre" style="text-align: center; background-color: #1e5c27; color: white; padding: 15px; font-weight: bold; font-size: 20px;">
+            👑 SESSION ADMINISTRATEUR
+        </div>
+        
+        <h2 style="padding-left: 15px; margin-top: 20px; color: #333; font-family: sans-serif;">Tableau de Bord</h2>
+
+        <div style="padding: 15px;">
+            <button style="display: block; width: 100%; padding: 14px; margin-bottom: 12px; background-color: #2e7d32; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 15px;">
+                💼 MODULE GESTION
+            </button>
+            
+            <button style="display: block; width: 100%; padding: 14px; margin-bottom: 12px; background-color: #2e7d32; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 15px;">
+                🪙 MODULE FINANCES
+            </button>
+
+            <button onclick="ouvrirGestionUtilisateurs()" style="display: block; width: 100%; padding: 15px; margin-bottom: 12px; background-color: #0288d1; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.15);">
+                👥 AJOUTER PARTENAIRE / PORCHER
+            </button>
+            
+            <button style="display: block; width: 100%; padding: 14px; margin-bottom: 12px; background-color: #f57c00; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 15px;">
+                🔄 RESTAURATION SYSTEME
+            </button>
+            
+            <button onclick="deconnexion()" style="display: block; width: 100%; padding: 14px; background-color: #c62828; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 15px;">
+                🚪 DÉCONNEXION
+            </button>
+        </div>
+    </div>
+
+    <div id="espace-partenaire" class="page" style="display: none; padding: 15px;">
+        <h2>🤝 Espace Partenaire</h2>
+        <button onclick="deconnexion()" style="display: block; width: 100%; padding: 14px; background-color: #c62828; color: white; border: none; border-radius: 8px; font-weight: bold;">🚪 DÉCONNEXION</button>
+    </div>
+
+    <div id="espace-porcher" class="page" style="display: none; padding: 15px;">
+        <h2>🐖 Espace Porcher</h2>
+        <button onclick="deconnexion()" style="display: block; width: 100%; padding: 14px; background-color: #c62828; color: white; border: none; border-radius: 8px; font-weight: bold;">🚪 DÉCONNEXION</button>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
+
+
