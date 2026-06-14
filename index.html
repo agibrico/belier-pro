@@ -58,6 +58,78 @@
   </style>
 </head>
 <body>
+  <body>
+
+    <div id="ecran-selection-role" style="display: block;">
+        <div class="header-titre" style="text-align: center; background-color: #1e5c27; color: white; padding: 20px; font-weight: bold; font-size: 22px;">
+            🐖 BÉLIER PRO
+        </div>
+        <div style="padding: 25px; text-align: center; font-family: sans-serif;">
+            <h3 style="color: #333; margin-bottom: 25px;">Sélectionnez votre profil d'accès :</h3>
+            
+            <button onclick="afficherEcranParRole('admin')" style="display: block; width: 100%; padding: 16px; margin: 15px 0; font-size: 16px; font-weight: bold; border: none; border-radius: 8px; background-color: #1e5c27; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                👑 DIRECTEUR / ADMINISTRATEUR
+            </button>
+            
+            <button onclick="afficherEcranParRole('partenaire')" style="display: block; width: 100%; padding: 16px; margin: 15px 0; font-size: 16px; font-weight: bold; border: none; border-radius: 8px; background-color: #2e7d32; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                🤝 ASSOCIÉ / PARTENAIRE
+            </button>
+            
+            <button onclick="afficherEcranParRole('porcher')" style="display: block; width: 100%; padding: 16px; margin: 15px 0; font-size: 16px; font-weight: bold; border: none; border-radius: 8px; background-color: #f57c00; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                🐖 ÉLEVEUR / PORCHER
+            </button>
+        </div>
+    </div>
+
+
+    <div id="espace-admin" style="display: none;">
+        <div class="header-titre" style="text-align: center; background-color: #1e5c27; color: white; padding: 15px; font-weight: bold;">
+            BÉLIER PRO
+        </div>
+        <div style="padding: 10px; background-color: #e8f5e9; text-align: center; font-size: 12px; color: #1e5c27; font-weight: bold;">
+            🟢 CONNECTÉ (EN LIGNE) <span style="float: right;">Données Prêtes</span>
+        </div>
+
+        <h2 style="padding-left: 15px; color: #333;">Espace Administrateur</h2>
+
+        <div style="margin: 15px; padding: 15px; background: #f0f4f8; border-radius: 8px;">
+            <strong>Tableau de Bord Centralisé</strong><br>
+            <small>Cheptel Total vif: Calcul...</small><br>
+            <small>Mortalité cumulée: 0 sujet</small>
+        </div>
+
+        <div style="padding: 15px;">
+            <button style="display: block; width: 100%; padding: 14px; margin-bottom: 12px; background-color: #2e7d32; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 15px;">
+                💼 MODULE GESTION
+            </button>
+            
+            <button style="display: block; width: 100%; padding: 14px; margin-bottom: 12px; background-color: #2e7d32; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 15px;">
+                🪙 MODULE FINANCES
+            </button>
+
+            <button onclick="ouvrirGestionUtilisateurs()" style="display: block; width: 100%; padding: 14px; margin-bottom: 12px; background-color: #0288d1; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 15px;">
+                👥 AJOUTER PARTENAIRE / PORCHER
+            </button>
+            
+            <button style="display: block; width: 100%; padding: 14px; margin-bottom: 12px; background-color: #f57c00; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 15px;">
+                🔄 RESTAURATION SYSTEME
+            </button>
+            
+            <button onclick="deconnexion()" style="display: block; width: 100%; padding: 14px; background-color: #c62828; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 15px;">
+                DÉCONNEXION
+            </button>
+        </div>
+    </div>
+
+
+    <div id="espace-partenaire" style="display: none;">
+        </div>
+
+    <div id="espace-porcher" style="display: none;">
+        </div>
+
+</body>
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 
 <meta name="apple-mobile-web-app-capable" content="yes">
