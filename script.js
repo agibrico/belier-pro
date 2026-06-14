@@ -104,12 +104,54 @@ function deconnexion() {
     basculerPage('ecran-selection-role');
 }
 
-// Fonction liée au nouveau bouton bleu de la session Administrateur
+// Modifie cette fonction pour qu'elle ouvre le nouvel écran au lieu de faire une alerte
 function ouvrirGestionUtilisateurs() {
-    alert("Ouverture de l'interface d'ajout et de configuration pour un nouveau PARTENAIRE ou PORCHER.");
-    // Plus tard, tu pourras utiliser basculerPage('page-creation-compte') ici
+    basculerPage('page-nouvel-utilisateur');
 }
 
+// Fonction pour récupérer les données du formulaire et les envoyer à Google Sheets
+function sauvegarderUtilisateur(event) {
+    event.preventDefault(); // Empêche la page de se recharger
+
+    if (!navigator.onLine) {
+        alert("🔴 Impossible d'enregistrer : vous êtes hors-ligne. Connectez-vous à Internet.");
+        return;
+    }
+
+    // Récupération des données saisies sur le téléphone
+    const payload = {
+        action: "ajouterPersonnel",
+        role: document.getElementById('user-role').value,
+        nom: document.getElementById('user-nom').value,
+        telephone: document.getElementById('user-telephone').value
+    };
+
+    // Message d'attente
+    remplacerTexteConfiguration("Envoi...", "Enregistrement du profil...");
+
+    // Envoi direct vers ton Apps Script Google Sheets
+    fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: { "Content-Type": "text/plain;charset=utf-8" }
+    })
+    .then(res => res.json())
+    .then(response => {
+        if (response.status === "success") {
+            alert("✅ Enregistrement réussi avec succès dans la base de données !");
+            document.getElementById('formulaire-utilisateur').reset(); // Vide le formulaire
+            basculerPage('espace-admin'); // Retour automatique au tableau de bord
+        } else {
+            alert("❌ Erreur du serveur : " + response.message);
+        }
+        remplacerTexteConfiguration("En ligne 🟢", "Prêt !");
+    })
+    .catch(err => {
+        console.error("Erreur réseau :", err);
+        alert("❌ Erreur réseau lors de l'envoi. Veuillez réessayer.");
+        remplacerTexteConfiguration("En ligne 🟢", "Prêt !");
+    });
+}
 // ==========================================================
 // ENVOI DES DONNÉES DU FORMULAIRE (ENTRÉE PORC)
 // ==========================================================
